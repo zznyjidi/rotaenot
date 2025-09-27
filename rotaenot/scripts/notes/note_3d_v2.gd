@@ -48,34 +48,35 @@ func _update_visual_from_tracks():
 	if not visual:
 		return
 
+	# REVERSED: Notes now travel from center (0) to pad (1)
 	# Get positions on both tracks at current progress
 	var index = int(progress * (top_track_points.size() - 1))
 	var next_index = min(index + 1, top_track_points.size() - 1)
 	var t = (progress * (top_track_points.size() - 1)) - index
 
-	# Interpolate positions on both tracks
-	var top_near = top_track_points[index].lerp(top_track_points[next_index], t)
-	var bottom_near = bottom_track_points[index].lerp(bottom_track_points[next_index], t)
+	# Interpolate positions on both tracks (front of note)
+	var top_front = top_track_points[index].lerp(top_track_points[next_index], t)
+	var bottom_front = bottom_track_points[index].lerp(bottom_track_points[next_index], t)
 
-	# For the far end (back of note), use earlier progress
-	var back_progress = max(0, progress - 0.1)  # Note length
+	# For the back end (rear of note), use earlier progress
+	var back_progress = max(0, progress - 0.15)  # Note length
 	var back_index = int(back_progress * (top_track_points.size() - 1))
 	var back_next = min(back_index + 1, top_track_points.size() - 1)
 	var back_t = (back_progress * (top_track_points.size() - 1)) - back_index
 
-	var top_far = top_track_points[back_index].lerp(top_track_points[back_next], back_t)
-	var bottom_far = bottom_track_points[back_index].lerp(bottom_track_points[back_next], back_t)
+	var top_back = top_track_points[back_index].lerp(top_track_points[back_next], back_t)
+	var bottom_back = bottom_track_points[back_index].lerp(bottom_track_points[back_next], back_t)
 
-	# Position note at center of the track
-	position = (top_near + bottom_near) / 2.0
+	# Position note at center of the front edge
+	position = (top_front + bottom_front) / 2.0
 
 	# Create rectangle with four corners on the track lines
 	# Convert to local coordinates
 	var points = PackedVector2Array([
-		top_far - position,      # Top left (back)
-		top_near - position,     # Top right (front)
-		bottom_near - position,  # Bottom right (front)
-		bottom_far - position    # Bottom left (back)
+		top_back - position,      # Top left (back/center)
+		top_front - position,     # Top right (front/pad)
+		bottom_front - position,  # Bottom right (front/pad)
+		bottom_back - position    # Bottom left (back/center)
 	])
 
 	visual.polygon = points
