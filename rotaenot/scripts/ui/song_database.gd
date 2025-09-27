@@ -85,6 +85,23 @@ static var songs = [
 			"Normal": 0,
 			"Hard": 0
 		}
+	},
+	{
+		"id": "template_chart",
+		"title": "Template Example",
+		"artist": "Chart Designer",
+		"bpm": 120,
+		"duration": "0:30",
+		"chart_path": "res://charts/template_chart.json",
+		"music_path": "res://assets/music/Tobu - Funk It [NCS Release].mp3",
+		"preview_image": "res://assets/ui/song_covers/template.png",
+		"difficulties": {
+			"Normal": {"level": 5, "notes": 48}
+		},
+		"unlock_status": true,  # Available for testing
+		"high_scores": {
+			"Normal": 0
+		}
 	}
 ]
 
