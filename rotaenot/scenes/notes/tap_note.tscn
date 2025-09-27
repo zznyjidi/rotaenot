@@ -1,0 +1,32 @@
+[gd_scene load_steps=3 format=3 uid="uid://c4nxe7gpuvmxj"]
+
+[ext_resource type="Script" path="res://scripts/notes/visual_note.gd" id="1_note"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1"]
+radius = 20.0
+
+[node name="TapNote" type="Area2D"]
+script = ExtResource("1_note")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_1")
+
+[node name="Visual" type="Node2D" parent="."]
+
+[node name="Outer" type="Line2D" parent="Visual"]
+points = PackedVector2Array(-20, 0, -14, -14, 0, -20, 14, -14, 20, 0, 14, 14, 0, 20, -14, 14, -20, 0)
+closed = true
+width = 3.0
+default_color = Color(0, 1, 1, 1)
+
+[node name="Inner" type="ColorRect" parent="Visual"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+color = Color(0, 0.8, 0.8, 0.8)
