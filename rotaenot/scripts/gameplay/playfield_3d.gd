@@ -4,18 +4,18 @@ extends Node2D
 var pads = []
 var track_lines = []
 
-# Horizontal ellipse parameters (wide olive)
-var ellipse_width = 800.0  # Much wider to fill screen
-var ellipse_height = 500.0  # Height (but will be horizontal)
+# Horizontal ellipse with 1:2 ratio (width:height), scaled by 0.8
+var ellipse_width = 320.0  # Width (1 part) * 0.8 scale
+var ellipse_height = 640.0  # Height (2 parts) * 0.8 scale
 
-# Pad configuration - positioned on top and bottom curves of horizontal olive
+# Pad configuration - positioned on LEFT and RIGHT sides of horizontal olive
 var pad_config = [
-	{"side": "top", "pos": "left", "key": "Q", "x_offset": -250},
-	{"side": "top", "pos": "mid", "key": "A", "x_offset": 0},
-	{"side": "top", "pos": "right", "key": "Z", "x_offset": 250},
-	{"side": "bottom", "pos": "left", "key": "P", "x_offset": -250},
-	{"side": "bottom", "pos": "mid", "key": "L", "x_offset": 0},
-	{"side": "bottom", "pos": "right", "key": "M", "x_offset": 250}
+	{"side": "left", "pos": "top", "key": "Q", "y_offset": -200},
+	{"side": "left", "pos": "mid", "key": "A", "y_offset": 0},
+	{"side": "left", "pos": "bot", "key": "Z", "y_offset": 200},
+	{"side": "right", "pos": "top", "key": "P", "y_offset": -200},
+	{"side": "right", "pos": "mid", "key": "L", "y_offset": 0},
+	{"side": "right", "pos": "bot", "key": "M", "y_offset": 200}
 ]
 
 func _ready():
@@ -24,7 +24,7 @@ func _ready():
 	_create_track_lines()
 
 func _create_playfield():
-	# Create horizontal ellipse boundary (rotated 90 degrees)
+	# Create horizontal ellipse boundary (1:2 ratio, horizontal orientation)
 	var boundary = Line2D.new()
 	boundary.width = 4.0
 	boundary.default_color = Color(0.3, 0.4, 0.6, 0.8)
@@ -36,9 +36,9 @@ func _create_playfield():
 	for i in range(segments):
 		var t = (i / float(segments)) * TAU
 
-		# Horizontal ellipse (swap x and y)
-		var x = sin(t) * ellipse_width  # Use sin for x (horizontal stretch)
-		var y = cos(t) * ellipse_height  # Use cos for y
+		# Horizontal ellipse with proper 1:2 ratio
+		var x = cos(t) * ellipse_height  # Height becomes horizontal width
+		var y = sin(t) * ellipse_width   # Width becomes vertical height
 
 		points.append(Vector2(x, y))
 
@@ -58,21 +58,21 @@ func _create_single_pad(config: Dictionary, index: int) -> Node2D:
 	var pad = Node2D.new()
 	pad.name = "Pad_" + config.key
 
-	# Position pads on top or bottom of horizontal ellipse
-	var x_pos = config.x_offset
-	var y_pos = ellipse_height * (1.0 if config.side == "bottom" else -1.0)
+	# Position pads on LEFT or RIGHT of horizontal ellipse
+	var x_pos = ellipse_height * (1.0 if config.side == "right" else -1.0)
+	var y_pos = config.y_offset
 
-	# Adjust Y to be on the ellipse curve at this X position
-	# x^2/a^2 + y^2/b^2 = 1, solve for y
-	var x_normalized = x_pos / ellipse_width
-	var y_factor = sqrt(max(0, 1.0 - x_normalized * x_normalized))
-	y_pos *= y_factor
+	# Adjust X to be on the ellipse curve at this Y position
+	# x^2/a^2 + y^2/b^2 = 1, solve for x
+	var y_normalized = y_pos / ellipse_width
+	var x_factor = sqrt(max(0, 1.0 - y_normalized * y_normalized))
+	x_pos *= x_factor
 
 	pad.position = Vector2(x_pos, y_pos)
 
 	# Create pad visual (rectangular pad)
 	var pad_visual = ColorRect.new()
-	var pad_size = Vector2(80, 50)
+	var pad_size = Vector2(70, 45)
 	pad_visual.size = pad_size
 	pad_visual.position = -pad_size / 2
 	pad_visual.color = Color(0.2, 0.5, 0.8, 0.6)
@@ -81,8 +81,8 @@ func _create_single_pad(config: Dictionary, index: int) -> Node2D:
 	# Add key label
 	var label = Label.new()
 	label.text = "[" + config.key + "]"
-	label.add_theme_font_size_override("font_size", 24)
-	label.position = Vector2(-15, -12)
+	label.add_theme_font_size_override("font_size", 20)
+	label.position = Vector2(-15, -10)
 	pad.add_child(label)
 
 	# Store pad data
@@ -99,32 +99,32 @@ func _create_track_lines():
 		var pad = pads[i]
 		var pad_pos = pad.position
 
-		# Create TWO straight lines per pad (from left and right edges of pad)
-		var pad_half_width = 40  # Half of pad width
+		# Create TWO straight lines per pad (from top and bottom edges of pad)
+		var pad_half_height = 22  # Half of pad height
 
-		# Left edge line
-		var line_left = Line2D.new()
-		line_left.width = 2.0
-		line_left.default_color = Color(0.3, 0.3, 0.5, 0.3)
+		# Top edge line
+		var line_top = Line2D.new()
+		line_top.width = 2.0
+		line_top.default_color = Color(0.3, 0.3, 0.5, 0.3)
 
-		var start_left = pad_pos + Vector2(-pad_half_width, 0)
-		var end_left = Vector2(start_left.x * 0.1, 0)  # Converge toward center
+		var start_top = pad_pos + Vector2(0, -pad_half_height)
+		var end_top = Vector2(0, start_top.y * 0.1)  # Converge toward center
 
-		line_left.points = PackedVector2Array([start_left, end_left])
-		lines_container.add_child(line_left)
-		track_lines.append(line_left)
+		line_top.points = PackedVector2Array([start_top, end_top])
+		lines_container.add_child(line_top)
+		track_lines.append(line_top)
 
-		# Right edge line
-		var line_right = Line2D.new()
-		line_right.width = 2.0
-		line_right.default_color = Color(0.3, 0.3, 0.5, 0.3)
+		# Bottom edge line
+		var line_bottom = Line2D.new()
+		line_bottom.width = 2.0
+		line_bottom.default_color = Color(0.3, 0.3, 0.5, 0.3)
 
-		var start_right = pad_pos + Vector2(pad_half_width, 0)
-		var end_right = Vector2(start_right.x * 0.1, 0)  # Converge toward center
+		var start_bottom = pad_pos + Vector2(0, pad_half_height)
+		var end_bottom = Vector2(0, start_bottom.y * 0.1)  # Converge toward center
 
-		line_right.points = PackedVector2Array([start_right, end_right])
-		lines_container.add_child(line_right)
-		track_lines.append(line_right)
+		line_bottom.points = PackedVector2Array([start_bottom, end_bottom])
+		lines_container.add_child(line_bottom)
+		track_lines.append(line_bottom)
 
 func highlight_pad(index: int):
 	if index >= 0 and index < pads.size():
