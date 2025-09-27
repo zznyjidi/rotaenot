@@ -1,0 +1,58 @@
+extends Node2D
+
+var note_scene = preload("res://scripts/notes/note_3d.gd")
+var spawn_timer: float = 0.0
+var spawn_interval: float = 1.0
+var is_spawning: bool = false
+
+# Pattern for demo
+var pattern_index: int = 0
+var demo_pattern = [0, 3, 1, 4, 2, 5, 1, 4, 0, 3, 2, 5]  # Pad indices
+
+func _ready():
+	pass
+
+func start_spawning():
+	is_spawning = true
+	print("Started spawning notes")
+
+func stop_spawning():
+	is_spawning = false
+
+func _process(delta):
+	if not is_spawning:
+		return
+
+	spawn_timer += delta
+
+	if spawn_timer >= spawn_interval:
+		spawn_timer = 0.0
+		_spawn_note()
+
+		# Vary the spawn rate
+		spawn_interval = randf_range(0.5, 1.5)
+
+func _spawn_note():
+	var playfield = get_parent()
+	var note_container = playfield.get_node("NoteContainer")
+
+	if not playfield or not note_container:
+		return
+
+	# Get next pad from pattern
+	var target_pad = demo_pattern[pattern_index]
+	pattern_index = (pattern_index + 1) % demo_pattern.size()
+
+	# Get track points for this pad
+	var track_points = playfield.get_track_points(target_pad)
+	if track_points.size() == 0:
+		return
+
+	# Create the note
+	var note = Node2D.new()
+	var note_script = note_scene.new()
+	note.set_script(note_script)
+	note.setup(target_pad, track_points)
+
+	note_container.add_child(note)
+	note._ready()  # Ensure it's initialized

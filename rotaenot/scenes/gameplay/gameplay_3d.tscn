@@ -1,0 +1,97 @@
+[gd_scene load_steps=5 format=3 uid="uid://dgxea7tpymlxy"]
+
+[ext_resource type="Script" path="res://scripts/gameplay/gameplay_3d_controller.gd" id="1_3d_controller"]
+[ext_resource type="Script" path="res://scripts/gameplay/playfield_3d.gd" id="2_3d_playfield"]
+[ext_resource type="Script" path="res://scripts/gameplay/note_spawner_3d.gd" id="3_3d_spawner"]
+[ext_resource type="Script" path="res://scripts/ui/hud_3d.gd" id="4_3d_hud"]
+
+[node name="Gameplay3D" type="Node2D"]
+script = ExtResource("1_3d_controller")
+
+[node name="Background" type="ColorRect" parent="."]
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(0.02, 0.02, 0.05, 1)
+
+[node name="Playfield3D" type="Node2D" parent="."]
+position = Vector2(640, 360)
+script = ExtResource("2_3d_playfield")
+
+[node name="TrackLines" type="Node2D" parent="Playfield3D"]
+
+[node name="Pads" type="Node2D" parent="Playfield3D"]
+
+[node name="NoteSpawner" type="Node2D" parent="Playfield3D"]
+script = ExtResource("3_3d_spawner")
+
+[node name="NoteContainer" type="Node2D" parent="Playfield3D"]
+
+[node name="HUD" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("4_3d_hud")
+
+[node name="CenterDisplay" type="Control" parent="HUD"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -50.0
+offset_right = 100.0
+offset_bottom = 50.0
+
+[node name="ScoreLabel" type="Label" parent="HUD/CenterDisplay"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -100.0
+offset_top = -30.0
+offset_right = 100.0
+offset_bottom = 0.0
+theme_override_font_sizes/font_size = 32
+text = "0"
+horizontal_alignment = 1
+
+[node name="ComboLabel" type="Label" parent="HUD/CenterDisplay"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = 0.0
+offset_right = 100.0
+offset_bottom = 30.0
+theme_override_font_sizes/font_size = 24
+text = "COMBO: 0"
+horizontal_alignment = 1
+
+[node name="KeyHints" type="Control" parent="HUD"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="JudgmentLabel" type="Label" parent="HUD"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -200.0
+offset_right = 100.0
+offset_bottom = -150.0
+theme_override_font_sizes/font_size = 36
+horizontal_alignment = 1
+vertical_alignment = 1

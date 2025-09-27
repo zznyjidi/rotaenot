@@ -5,7 +5,7 @@ func _ready():
 
 func _on_play_button_pressed():
 	print("Starting game...")
-	get_tree().change_scene_to_file("res://scenes/gameplay/gameplay_v2.tscn")
+	get_tree().change_scene_to_file("res://scenes/gameplay/gameplay_3d.tscn")
 
 func _on_settings_button_pressed():
 	print("Settings not implemented yet")
