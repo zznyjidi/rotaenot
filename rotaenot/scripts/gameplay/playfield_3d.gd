@@ -4,23 +4,18 @@ extends Node2D
 var pads = []
 var track_lines = []
 
-# Olive/ellipse parameters
-var ellipse_width = 500.0
-var ellipse_height = 800.0  # Taller than screen
-var center_pinch = 0.7  # How much to pinch the middle (0.7 = 30% thinner)
+# Simple ellipse parameters (tall olive)
+var ellipse_width = 400.0
+var ellipse_height = 600.0  # Taller than wide
 
-# 3D perspective parameters
-var vanishing_point = Vector2(0, 0)
-var perspective_strength = 0.4
-
-# Pad configuration
+# Pad configuration - positioned on left and right sides
 var pad_config = [
-	{"side": "left", "pos": "top", "key": "Q", "angle": -60},
-	{"side": "left", "pos": "mid", "key": "A", "angle": -90},
-	{"side": "left", "pos": "bot", "key": "Z", "angle": -120},
-	{"side": "right", "pos": "top", "key": "P", "angle": 60},
-	{"side": "right", "pos": "mid", "key": "L", "angle": 90},
-	{"side": "right", "pos": "bot", "key": "M", "angle": 120}
+	{"side": "left", "pos": "top", "key": "Q", "y_offset": -200},
+	{"side": "left", "pos": "mid", "key": "A", "y_offset": 0},
+	{"side": "left", "pos": "bot", "key": "Z", "y_offset": 200},
+	{"side": "right", "pos": "top", "key": "P", "y_offset": -200},
+	{"side": "right", "pos": "mid", "key": "L", "y_offset": 0},
+	{"side": "right", "pos": "bot", "key": "M", "y_offset": 200}
 ]
 
 func _ready():
@@ -29,7 +24,7 @@ func _ready():
 	_create_track_lines()
 
 func _create_playfield():
-	# Create the olive-shaped boundary
+	# Create simple ellipse boundary
 	var boundary = Line2D.new()
 	boundary.width = 3.0
 	boundary.default_color = Color(0.3, 0.4, 0.6, 0.8)
@@ -41,20 +36,11 @@ func _create_playfield():
 	for i in range(segments):
 		var t = (i / float(segments)) * TAU
 
-		# Basic ellipse
+		# Simple ellipse formula
 		var x = cos(t) * ellipse_width
-		var y = sin(t) * ellipse_height
+		var y = sin(t) * ellipse_height * 0.6  # Compress Y to fit screen
 
-		# Apply pinch effect (make middle thinner)
-		var pinch_factor = 1.0 - (center_pinch * (1.0 - abs(sin(t))))
-		x *= pinch_factor
-
-		# Apply perspective transformation
-		var depth = (y / ellipse_height + 1.0) * 0.5  # 0 at top, 1 at bottom
-		var perspective_scale = lerp(0.6, 1.0, depth)
-		x *= perspective_scale
-
-		points.append(Vector2(x, y * 0.5))  # Compress Y for screen fit
+		points.append(Vector2(x, y))
 
 	boundary.points = points
 	add_child(boundary)
@@ -72,34 +58,31 @@ func _create_single_pad(config: Dictionary, index: int) -> Node2D:
 	var pad = Node2D.new()
 	pad.name = "Pad_" + config.key
 
-	# Calculate position on ellipse
-	var angle_rad = deg_to_rad(config.angle)
-	var base_x = cos(angle_rad) * ellipse_width
-	var base_y = sin(angle_rad) * ellipse_height * 0.5
+	# Position pads on left or right side
+	var x_pos = ellipse_width * (1.0 if config.side == "right" else -1.0)
+	var y_pos = config.y_offset
 
-	# Apply pinch effect
-	var pinch_factor = 1.0 - (center_pinch * (1.0 - abs(sin(angle_rad))))
-	base_x *= pinch_factor
+	# Adjust X to be on the ellipse curve at this Y position
+	# x^2/a^2 + y^2/b^2 = 1, solve for x
+	var y_normalized = y_pos / (ellipse_height * 0.6)
+	var x_factor = sqrt(max(0, 1.0 - y_normalized * y_normalized))
+	x_pos *= x_factor
 
-	# Apply perspective
-	var depth = (base_y / (ellipse_height * 0.5) + 1.0) * 0.5
-	var perspective_scale = lerp(0.6, 1.0, depth)
-	base_x *= perspective_scale
+	pad.position = Vector2(x_pos, y_pos)
 
-	pad.position = Vector2(base_x, base_y)
-
-	# Create pad visual
+	# Create pad visual (rectangular pad)
 	var pad_visual = ColorRect.new()
-	pad_visual.size = Vector2(60 * perspective_scale, 60 * perspective_scale)
-	pad_visual.position = -pad_visual.size / 2
+	var pad_size = Vector2(80, 40)
+	pad_visual.size = pad_size
+	pad_visual.position = -pad_size / 2
 	pad_visual.color = Color(0.2, 0.5, 0.8, 0.6)
 	pad.add_child(pad_visual)
 
 	# Add key label
 	var label = Label.new()
 	label.text = config.key
-	label.add_theme_font_size_override("font_size", int(24 * perspective_scale))
-	label.position = Vector2(-15, -15) * perspective_scale
+	label.add_theme_font_size_override("font_size", 24)
+	label.position = Vector2(-10, -10)
 	pad.add_child(label)
 
 	# Store pad data
@@ -113,47 +96,35 @@ func _create_track_lines():
 	var lines_container = $TrackLines
 
 	for i in range(pad_config.size()):
-		var config = pad_config[i]
 		var pad = pads[i]
+		var pad_pos = pad.position
 
-		# Create track line from center area to pad
-		var track_line = Line2D.new()
-		track_line.width = 2.0
-		track_line.default_color = Color(0.3, 0.3, 0.5, 0.3)
+		# Create TWO straight lines per pad (from edges of pad)
+		var pad_half_width = 40  # Half of pad width
 
-		# Start point (near center but offset)
-		var start_offset = Vector2(0, 0)
-		if config.side == "left":
-			start_offset.x = -30
-		else:
-			start_offset.x = 30
+		# Top edge line
+		var line_top = Line2D.new()
+		line_top.width = 2.0
+		line_top.default_color = Color(0.3, 0.3, 0.5, 0.3)
 
-		if config.pos == "top":
-			start_offset.y = -20
-		elif config.pos == "bot":
-			start_offset.y = 20
+		var start_top = pad_pos + Vector2(0, -pad_half_width/2)
+		var end_top = Vector2(0, start_top.y * 0.2)  # Converge toward center
 
-		# End point (pad position)
-		var end_point = pad.position
+		line_top.points = PackedVector2Array([start_top, end_top])
+		lines_container.add_child(line_top)
+		track_lines.append(line_top)
 
-		# Create intermediate points for curved track
-		var points = []
-		for j in range(11):
-			var t = j / 10.0
-			var point = start_offset.lerp(end_point, t)
+		# Bottom edge line
+		var line_bottom = Line2D.new()
+		line_bottom.width = 2.0
+		line_bottom.default_color = Color(0.3, 0.3, 0.5, 0.3)
 
-			# Add slight curve
-			var curve_offset = sin(t * PI) * 20.0
-			if config.side == "left":
-				point.x -= curve_offset
-			else:
-				point.x += curve_offset
+		var start_bottom = pad_pos + Vector2(0, pad_half_width/2)
+		var end_bottom = Vector2(0, start_bottom.y * 0.2)  # Converge toward center
 
-			points.append(point)
-
-		track_line.points = points
-		lines_container.add_child(track_line)
-		track_lines.append(track_line)
+		line_bottom.points = PackedVector2Array([start_bottom, end_bottom])
+		lines_container.add_child(line_bottom)
+		track_lines.append(line_bottom)
 
 func highlight_pad(index: int):
 	if index >= 0 and index < pads.size():
@@ -171,6 +142,17 @@ func get_pad_position(index: int) -> Vector2:
 	return Vector2.ZERO
 
 func get_track_points(index: int) -> PackedVector2Array:
-	if index >= 0 and index < track_lines.size():
-		return track_lines[index].points
+	# Return points for the note to follow (straight line from center to pad)
+	if index >= 0 and index < pads.size():
+		var pad_pos = pads[index].position
+		var start = Vector2(0, 0)  # Start from center
+		var end = pad_pos
+
+		# Create intermediate points for smooth movement
+		var points = PackedVector2Array()
+		for i in range(11):
+			var t = i / 10.0
+			points.append(start.lerp(end, t))
+
+		return points
 	return PackedVector2Array()

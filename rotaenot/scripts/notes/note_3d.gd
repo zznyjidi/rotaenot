@@ -6,8 +6,8 @@ var progress: float = 0.0
 var speed: float = 0.3  # Progress per second
 
 # Visual properties
-var base_width: float = 40.0
-var base_height: float = 20.0
+var base_width: float = 60.0  # Width to span between track lines
+var base_height: float = 30.0  # Height of the note
 
 func _ready():
 	set_meta("target_pad", target_pad)
@@ -61,27 +61,27 @@ func _update_visual_perspective():
 		return
 
 	# Calculate size based on progress (perspective scaling)
-	var scale_factor = lerp(0.3, 1.0, progress)  # Start small, grow larger
+	var scale_factor = lerp(0.2, 1.2, progress)  # Start very small, grow larger
 	var width = base_width * scale_factor
 	var height = base_height * scale_factor
 
-	# Create trapezoid shape for 3D effect
-	var skew_factor = (1.0 - progress) * 0.3  # More skew when far
-	var top_width = width * (1.0 - skew_factor)
-	var bottom_width = width * (1.0 + skew_factor)
+	# Create perspective rectangle (smaller when far, larger when close)
+	# The note should look like it's coming from the distance
+	var perspective_factor = 1.0 - (1.0 - progress) * 0.5  # Perspective distortion
 
-	# Define the four corners of the perspective rectangle
+	# Define the four corners with perspective
 	var points = PackedVector2Array([
-		Vector2(-top_width / 2, -height / 2),     # Top left
-		Vector2(top_width / 2, -height / 2),      # Top right
-		Vector2(bottom_width / 2, height / 2),    # Bottom right
-		Vector2(-bottom_width / 2, height / 2)    # Bottom left
+		Vector2(-width / 2 * perspective_factor, -height / 2),  # Top left
+		Vector2(width / 2 * perspective_factor, -height / 2),   # Top right
+		Vector2(width / 2, height / 2),                        # Bottom right
+		Vector2(-width / 2, height / 2)                        # Bottom left
 	])
 
 	visual.polygon = points
 
-	# Fade in as it approaches
-	visual.modulate.a = lerp(0.4, 1.0, progress)
+	# Color and transparency based on distance
+	var color_intensity = lerp(0.5, 1.0, progress)
+	visual.color = Color(0.5 * color_intensity, 0.8 * color_intensity, 1.0, lerp(0.6, 1.0, progress))
 
 func get_hit_distance() -> float:
 	# Distance from the pad (end of track)
