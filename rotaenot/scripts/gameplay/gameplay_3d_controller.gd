@@ -55,7 +55,7 @@ func _setup_input_actions():
 
 func _input(event):
 	# Check for pad inputs
-	if event is InputEventKey and event.pressed:
+	if event is InputEventKey and event.pressed and not event.echo:
 		var key = OS.get_keycode_string(event.keycode)
 
 		# Map keys to pad indices
@@ -69,6 +69,7 @@ func _input(event):
 			"M": pad_index = 5
 
 		if pad_index >= 0:
+			# Initial press - try to hit notes and show visual feedback
 			_try_hit_pad(pad_index)
 
 func _try_hit_pad(pad_index: int):
