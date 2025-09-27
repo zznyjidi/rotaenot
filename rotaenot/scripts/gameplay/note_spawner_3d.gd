@@ -43,15 +43,32 @@ func _spawn_note():
 	var target_pad = demo_pattern[pattern_index]
 	pattern_index = (pattern_index + 1) % demo_pattern.size()
 
-	# Get track points for this pad
-	var track_points = playfield.get_track_points(target_pad)
-	if track_points.size() == 0:
-		return
+	# Get the two track lines for this pad
+	var track_idx = target_pad * 2  # Each pad has 2 tracks
 
-	# Create the note from scene
-	var note = note_scene.instantiate()
-	note_container.add_child(note)
+	# Get track line points
+	if not playfield.has_method("get_track_line_points"):
+		# Fallback to old method
+		var track_points = playfield.get_track_points(target_pad)
+		if track_points.size() == 0:
+			return
 
-	# Setup after adding to tree
-	if note.has_method("setup"):
-		note.setup(target_pad, track_points)
+		var note = note_scene.instantiate()
+		note_container.add_child(note)
+		if note.has_method("setup"):
+			note.setup(target_pad, track_points)
+	else:
+		# New method with separate track lines
+		var top_track = playfield.get_track_line_points(track_idx)
+		var bottom_track = playfield.get_track_line_points(track_idx + 1)
+
+		if top_track.size() == 0 or bottom_track.size() == 0:
+			return
+
+		# Create note with new script
+		var note = Node2D.new()
+		note.set_script(load("res://scripts/notes/note_3d_v2.gd"))
+		note_container.add_child(note)
+
+		if note.has_method("setup"):
+			note.setup(target_pad, track_idx, top_track, bottom_track)

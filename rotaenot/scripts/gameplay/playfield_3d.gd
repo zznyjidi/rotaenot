@@ -5,7 +5,7 @@ var pads = []
 var track_lines = []
 
 # Vertical ellipse - TALL and THIN with 1:2 ratio, scaled by 0.8
-var ellipse_width = 320.0  # Width - the SMALLER dimension (thin)
+var ellipse_width = 384.0  # Width - scaled by 1.2 (320 * 1.2)
 var ellipse_height = 640.0  # Height - the LARGER dimension (tall)
 
 # Pad configuration - positioned on LEFT and RIGHT sides of horizontal olive
@@ -70,12 +70,33 @@ func _create_single_pad(config: Dictionary, index: int) -> Node2D:
 
 	pad.position = Vector2(x_pos, y_pos)
 
-	# Create pad visual (rectangular pad)
-	var pad_visual = ColorRect.new()
-	var pad_size = Vector2(70, 45)
-	pad_visual.size = pad_size
-	pad_visual.position = -pad_size / 2
-	pad_visual.color = Color(0.2, 0.5, 0.8, 0.6)
+	# Create pad visual (curved segment on ellipse)
+	var pad_visual = Line2D.new()
+	pad_visual.width = 8.0
+	pad_visual.default_color = Color(0.2, 0.5, 0.8, 0.8)
+
+	# Create arc segment for the pad
+	var arc_points = []
+	var pad_arc_angle = 30.0  # Degrees of arc for each pad
+	var segments = 8
+
+	for j in range(segments + 1):
+		var angle_offset = (j / float(segments) - 0.5) * deg_to_rad(pad_arc_angle)
+		var base_angle = atan2(y_pos, x_pos)
+		var angle = base_angle + angle_offset
+
+		var arc_x = cos(angle) * ellipse_width
+		var arc_y = sin(angle) * ellipse_height
+
+		# Adjust for ellipse at this position
+		var y_norm = arc_y / ellipse_height
+		var x_fact = sqrt(max(0, 1.0 - y_norm * y_norm))
+		arc_x *= x_fact
+
+		# Convert to local coordinates relative to pad position
+		arc_points.append(Vector2(arc_x, arc_y) - pad_pos)
+
+	pad_visual.points = arc_points
 	pad.add_child(pad_visual)
 
 	# Add key label
@@ -155,4 +176,10 @@ func get_track_points(index: int) -> PackedVector2Array:
 			points.append(start.lerp(end, t))
 
 		return points
+	return PackedVector2Array()
+
+func get_track_line_points(track_index: int) -> PackedVector2Array:
+	# Get the actual track line points
+	if track_index >= 0 and track_index < track_lines.size():
+		return track_lines[track_index].points
 	return PackedVector2Array()
