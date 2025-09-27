@@ -68,7 +68,8 @@ func _create_single_pad(config: Dictionary, index: int) -> Node2D:
 	var x_factor = sqrt(max(0, 1.0 - y_normalized * y_normalized))
 	x_pos *= x_factor
 
-	pad.position = Vector2(x_pos, y_pos)
+	var pad_pos = Vector2(x_pos, y_pos)  # Declare pad_pos before using it
+	pad.position = pad_pos
 
 	# Create pad visual (curved segment on ellipse)
 	var pad_visual = Line2D.new()
