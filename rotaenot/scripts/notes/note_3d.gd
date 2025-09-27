@@ -11,16 +11,16 @@ var base_height: float = 20.0
 
 func _ready():
 	set_meta("target_pad", target_pad)
-	_create_visual()
 
-func _create_visual():
-	# Create a polygon that represents the rectangular note
-	var polygon = Polygon2D.new()
-	polygon.color = Color(0.5, 0.8, 1.0, 0.9)
-	add_child(polygon)
+	# Get or create visual
+	var visual = $Visual if has_node("Visual") else null
+	if not visual:
+		visual = Polygon2D.new()
+		visual.name = "Visual"
+		visual.color = Color(0.5, 0.8, 1.0, 0.9)
+		add_child(visual)
 
-	# Store for updates
-	set_meta("visual", polygon)
+	set_meta("visual", visual)
 
 func setup(pad_index: int, points: PackedVector2Array):
 	target_pad = pad_index

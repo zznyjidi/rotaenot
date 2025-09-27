@@ -1,6 +1,6 @@
 extends Node2D
 
-var note_scene = preload("res://scripts/notes/note_3d.gd")
+var note_scene = preload("res://scenes/notes/note_3d.tscn")
 var spawn_timer: float = 0.0
 var spawn_interval: float = 1.0
 var is_spawning: bool = false
@@ -48,11 +48,10 @@ func _spawn_note():
 	if track_points.size() == 0:
 		return
 
-	# Create the note
-	var note = Node2D.new()
-	var note_script = note_scene.new()
-	note.set_script(note_script)
-	note.setup(target_pad, track_points)
-
+	# Create the note from scene
+	var note = note_scene.instantiate()
 	note_container.add_child(note)
-	note._ready()  # Ensure it's initialized
+
+	# Setup after adding to tree
+	if note.has_method("setup"):
+		note.setup(target_pad, track_points)

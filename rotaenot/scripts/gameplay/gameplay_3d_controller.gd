@@ -110,7 +110,7 @@ func _hit_note(note: Node2D, distance: float):
 	# Remove the note
 	note.queue_free()
 
-func _miss_hit(pad_index: int):
+func _miss_hit(_pad_index: int):
 	combo = 0
 	hud.update_combo(combo)
 	hud.show_judgment("MISS")
