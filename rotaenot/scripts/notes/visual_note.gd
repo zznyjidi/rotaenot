@@ -18,13 +18,13 @@ var is_active: bool = true
 var was_hit: bool = false
 var current_distance: float
 
-var perfect_window: float = 40.0  # pixels
-var great_window: float = 80.0
-var good_window: float = 120.0
+var perfect_window: float = 20.0  # pixels - very tight timing
+var great_window: float = 40.0   # moderate timing
+var good_window: float = 60.0    # lenient timing
 
 func _ready():
-	# Initialize position
-	current_distance = spawn_distance
+	# Initialize position - start from center (0 distance)
+	current_distance = 50.0  # Start near center
 
 	# Set initial position based on angle
 	var angle_rad = deg_to_rad(position_angle)
@@ -52,7 +52,8 @@ func _process(delta):
 	if not is_active:
 		return
 
-	current_distance -= note_speed * delta
+	# Move outward from center
+	current_distance += note_speed * delta
 
 	var angle_rad = deg_to_rad(position_angle)
 	position = Vector2(
@@ -60,13 +61,15 @@ func _process(delta):
 		sin(angle_rad) * current_distance
 	)
 
-	if current_distance < 50:
+	# Miss if note goes past judgment circle
+	if current_distance > judgment_radius + 50:
 		if not was_hit:
 			_on_miss()
 		else:
 			queue_free()
 
-	var scale_factor = 0.5 + (spawn_distance - current_distance) / spawn_distance * 0.5
+	# Scale up as note moves outward
+	var scale_factor = 0.3 + (current_distance / judgment_radius) * 0.7
 	scale = Vector2(scale_factor, scale_factor)
 
 func get_distance_to_judgment() -> float:

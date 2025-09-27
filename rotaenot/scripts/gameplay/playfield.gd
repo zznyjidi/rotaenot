@@ -80,7 +80,8 @@ func _process(_delta):
 	queue_redraw()
 
 func _on_rotation_changed(angle: float):
-	rotation_indicator.rotation = deg_to_rad(angle)
+	# Rotate the entire playfield, not just the indicator
+	rotation = deg_to_rad(angle)
 
 func _on_basket_entered(basket: String):
 	match basket:

@@ -51,7 +51,8 @@ func _handle_mouse_rotation(delta):
 	var mouse_pos = get_global_mouse_position()
 	var center = get_viewport_rect().size / 2
 	var angle_to_mouse = (mouse_pos - center).angle()
-	target_rotation = angle_to_mouse
+	# Remove the 90-degree offset by adding PI/2
+	target_rotation = angle_to_mouse + PI/2
 
 func _handle_gyro_rotation(delta):
 	var accel = Input.get_accelerometer()
