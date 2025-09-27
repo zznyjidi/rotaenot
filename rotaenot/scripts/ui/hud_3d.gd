@@ -2,7 +2,12 @@ extends Control
 
 @onready var score_label = $CenterDisplay/ScoreLabel
 @onready var combo_label = $CenterDisplay/ComboLabel
+@onready var life_label = $CenterDisplay/LifeLabel
+@onready var miss_label = $CenterDisplay/MissLabel
 @onready var judgment_label = $JudgmentLabel
+
+var current_life: int = 100
+var miss_count: int = 0
 
 func _ready():
 	# Add key hints for each pad
@@ -31,12 +36,36 @@ func _create_key_hints():
 
 func update_score(score: int):
 	if score_label:
-		score_label.text = str(score)
+		score_label.text = "SCORE: " + str(score)
 
 		# Pulse effect
 		var tween = get_tree().create_tween()
 		tween.tween_property(score_label, "scale", Vector2(1.2, 1.2), 0.1)
 		tween.tween_property(score_label, "scale", Vector2(1.0, 1.0), 0.1)
+
+func update_life(life: int):
+	current_life = life
+	if life_label:
+		life_label.text = "LIFE: " + str(life) + "%"
+
+		# Color based on life
+		if life > 60:
+			life_label.modulate = Color.GREEN
+		elif life > 30:
+			life_label.modulate = Color.YELLOW
+		else:
+			life_label.modulate = Color.RED
+
+func update_miss(misses: int):
+	miss_count = misses
+	if miss_label:
+		miss_label.text = "MISS: " + str(misses)
+
+		# Flash red on new miss
+		if misses > 0:
+			miss_label.modulate = Color.RED
+			var tween = get_tree().create_tween()
+			tween.tween_property(miss_label, "modulate", Color.WHITE, 0.3)
 
 func update_combo(combo: int):
 	if combo_label:

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bibiwalohwmmr"
+path="res://.godot/imported/Electro-Light, Kovan - Skyline Pt. II [NCS Release].mp3-bd976bddaf8b4dfd611c8e25c7bb9143.mp3str"
+
+[deps]
+
+source_file="res://assets/music/Electro-Light, Kovan - Skyline Pt. II [NCS Release].mp3"
+dest_files=["res://.godot/imported/Electro-Light, Kovan - Skyline Pt. II [NCS Release].mp3-bd976bddaf8b4dfd611c8e25c7bb9143.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

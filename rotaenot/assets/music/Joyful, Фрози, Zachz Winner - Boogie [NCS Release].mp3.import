@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://c3jq1lls257bs"
+path="res://.godot/imported/Joyful, Фрози, Zachz Winner - Boogie [NCS Release].mp3-ef04e76f9afdc906db6a6e2ed75c0b45.mp3str"
+
+[deps]
+
+source_file="res://assets/music/Joyful, Фрози, Zachz Winner - Boogie [NCS Release].mp3"
+dest_files=["res://.godot/imported/Joyful, Фрози, Zachz Winner - Boogie [NCS Release].mp3-ef04e76f9afdc906db6a6e2ed75c0b45.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

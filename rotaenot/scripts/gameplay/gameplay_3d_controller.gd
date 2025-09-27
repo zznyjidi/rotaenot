@@ -8,6 +8,8 @@ extends Node2D
 var score = 0
 var combo = 0
 var max_combo = 0
+var life = 100
+var miss_count = 0
 
 # Key mappings for pads (index matches pad_config in playfield)
 var key_map = {
@@ -25,10 +27,26 @@ func _ready():
 	# Set up input actions dynamically if needed
 	_setup_input_actions()
 
+	# Initialize HUD
+	hud.update_score(score)
+	hud.update_combo(combo)
+	hud.update_life(life)
+	hud.update_miss(miss_count)
+
 	# Start spawning notes after a short delay
 	await get_tree().create_timer(0.5).timeout
 	if note_spawner and note_spawner.has_method("start_spawning"):
 		note_spawner.start_spawning()
+
+func _process(_delta):
+	# Check for notes that went past the hit zone
+	var notes = note_container.get_children()
+	for note in notes:
+		if note.has_meta("target_pad") and note.has_method("get_hit_distance"):
+			var dist = note.get_hit_distance()
+			# Note has gone too far past the pad
+			if dist < -50:
+				_auto_miss_note(note)
 
 func _setup_input_actions():
 	# Define the input map for the pads
@@ -112,5 +130,36 @@ func _hit_note(note: Node2D, distance: float):
 
 func _miss_hit(_pad_index: int):
 	combo = 0
+	miss_count += 1
+	life = max(0, life - 5)  # Lose 5% life per miss
+
 	hud.update_combo(combo)
+	hud.update_miss(miss_count)
+	hud.update_life(life)
 	hud.show_judgment("MISS")
+
+	# Check for game over
+	if life <= 0:
+		_game_over()
+
+func _auto_miss_note(note: Node2D):
+	# Handle notes that passed without being hit
+	combo = 0
+	miss_count += 1
+	life = max(0, life - 3)  # Lose 3% life for auto-miss
+
+	hud.update_combo(combo)
+	hud.update_miss(miss_count)
+	hud.update_life(life)
+
+	note.queue_free()
+
+	# Check for game over
+	if life <= 0:
+		_game_over()
+
+func _game_over():
+	print("Game Over! Final score: ", score, " Max combo: ", max_combo)
+	if note_spawner:
+		note_spawner.stop_spawning()
+	# Could transition to results screen here
