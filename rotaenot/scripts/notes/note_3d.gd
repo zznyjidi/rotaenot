@@ -65,16 +65,19 @@ func _update_visual_perspective():
 	var width = base_width * scale_factor
 	var height = base_height * scale_factor
 
-	# Create perspective rectangle (smaller when far, larger when close)
-	# The note should look like it's coming from the distance
-	var perspective_factor = 1.0 - (1.0 - progress) * 0.5  # Perspective distortion
+	# Create perspective rectangle - like looking through a tube
+	# The BACK (center/far) should be smaller than the FRONT (near/pad)
+	var back_scale = lerp(0.3, 1.0, progress)  # Back is smaller when far
+	var front_scale = 1.0  # Front stays full size
 
-	# Define the four corners with perspective
+	# Define the four corners with proper tube perspective
+	# When progress is 0 (far), the whole note is small
+	# When progress is 1 (near), back is still smaller than front
 	var points = PackedVector2Array([
-		Vector2(-width / 2 * perspective_factor, -height / 2),  # Top left
-		Vector2(width / 2 * perspective_factor, -height / 2),   # Top right
-		Vector2(width / 2, height / 2),                        # Bottom right
-		Vector2(-width / 2, height / 2)                        # Bottom left
+		Vector2(-width / 2 * back_scale, -height / 2 * back_scale),   # Top left (back)
+		Vector2(width / 2 * back_scale, -height / 2 * back_scale),    # Top right (back)
+		Vector2(width / 2 * front_scale, height / 2 * front_scale),   # Bottom right (front)
+		Vector2(-width / 2 * front_scale, height / 2 * front_scale)   # Bottom left (front)
 	])
 
 	visual.polygon = points
