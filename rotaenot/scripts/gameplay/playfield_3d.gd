@@ -4,9 +4,9 @@ extends Node2D
 var pads = []
 var track_lines = []
 
-# Horizontal ellipse with 1:2 ratio (width:height), scaled by 0.8
-var ellipse_width = 320.0  # Width (1 part) * 0.8 scale
-var ellipse_height = 640.0  # Height (2 parts) * 0.8 scale
+# Vertical ellipse - TALL and THIN with 1:2 ratio, scaled by 0.8
+var ellipse_width = 320.0  # Width - the SMALLER dimension (thin)
+var ellipse_height = 640.0  # Height - the LARGER dimension (tall)
 
 # Pad configuration - positioned on LEFT and RIGHT sides of horizontal olive
 var pad_config = [
@@ -24,7 +24,7 @@ func _ready():
 	_create_track_lines()
 
 func _create_playfield():
-	# Create horizontal ellipse boundary (1:2 ratio, horizontal orientation)
+	# Create VERTICAL ellipse boundary - tall and thin
 	var boundary = Line2D.new()
 	boundary.width = 4.0
 	boundary.default_color = Color(0.3, 0.4, 0.6, 0.8)
@@ -36,9 +36,9 @@ func _create_playfield():
 	for i in range(segments):
 		var t = (i / float(segments)) * TAU
 
-		# Horizontal ellipse with proper 1:2 ratio
-		var x = cos(t) * ellipse_height  # Height becomes horizontal width
-		var y = sin(t) * ellipse_width   # Width becomes vertical height
+		# VERTICAL ellipse - normal orientation
+		var x = cos(t) * ellipse_width   # Width is X (smaller - thin)
+		var y = sin(t) * ellipse_height  # Height is Y (larger - tall)
 
 		points.append(Vector2(x, y))
 
@@ -58,13 +58,13 @@ func _create_single_pad(config: Dictionary, index: int) -> Node2D:
 	var pad = Node2D.new()
 	pad.name = "Pad_" + config.key
 
-	# Position pads on LEFT or RIGHT of horizontal ellipse
-	var x_pos = ellipse_height * (1.0 if config.side == "right" else -1.0)
+	# Position pads on LEFT or RIGHT of VERTICAL ellipse
+	var x_pos = ellipse_width * (1.0 if config.side == "right" else -1.0)
 	var y_pos = config.y_offset
 
 	# Adjust X to be on the ellipse curve at this Y position
 	# x^2/a^2 + y^2/b^2 = 1, solve for x
-	var y_normalized = y_pos / ellipse_width
+	var y_normalized = y_pos / ellipse_height
 	var x_factor = sqrt(max(0, 1.0 - y_normalized * y_normalized))
 	x_pos *= x_factor
 
