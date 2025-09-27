@@ -23,9 +23,15 @@ var great_window: float = 80.0
 var good_window: float = 120.0
 
 func _ready():
-	var angle_rad = deg_to_rad(position_angle)
-	position = Vector2(0, 0)
+	# Initialize position
 	current_distance = spawn_distance
+
+	# Set initial position based on angle
+	var angle_rad = deg_to_rad(position_angle)
+	position = Vector2(
+		cos(angle_rad) * current_distance,
+		sin(angle_rad) * current_distance
+	)
 
 	_setup_visual()
 

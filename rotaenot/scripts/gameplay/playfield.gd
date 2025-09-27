@@ -12,12 +12,15 @@ var basket_width = 45.0
 var rotation_controller
 
 func _ready():
-	rotation_controller = preload("res://scripts/input/rotation_controller.gd").new()
+	rotation_controller = load("res://scripts/input/rotation_controller.gd").new()
 	add_child(rotation_controller)
 
-	rotation_controller.rotation_changed.connect(_on_rotation_changed)
-	rotation_controller.basket_entered.connect(_on_basket_entered)
-	rotation_controller.basket_exited.connect(_on_basket_exited)
+	if rotation_controller.has_signal("rotation_changed"):
+		rotation_controller.rotation_changed.connect(_on_rotation_changed)
+	if rotation_controller.has_signal("basket_entered"):
+		rotation_controller.basket_entered.connect(_on_basket_entered)
+	if rotation_controller.has_signal("basket_exited"):
+		rotation_controller.basket_exited.connect(_on_basket_exited)
 
 	_setup_circles()
 	_setup_baskets()

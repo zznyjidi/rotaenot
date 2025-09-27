@@ -14,12 +14,18 @@ var total_notes = 0
 var hit_notes = 0
 
 func _ready():
-	game_manager = preload("res://scripts/core/game_manager.gd").new()
+	# Initialize game manager
+	game_manager = load("res://scripts/core/game_manager.gd").new()
 	add_child(game_manager)
 
-	game_manager.score_updated.connect(_on_score_updated)
-	game_manager.combo_updated.connect(_on_combo_updated)
+	# Connect signals if they exist
+	if game_manager.has_signal("score_updated"):
+		game_manager.score_updated.connect(_on_score_updated)
+	if game_manager.has_signal("combo_updated"):
+		game_manager.combo_updated.connect(_on_combo_updated)
 
+	# Start demo after a short delay to ensure everything is loaded
+	await get_tree().create_timer(0.1).timeout
 	_start_demo()
 
 func _start_demo():
@@ -32,7 +38,12 @@ func _start_demo():
 	}
 
 	game_manager.start_game({}, demo_chart)
-	note_spawner.start_spawning()
+
+	# Make sure note_spawner exists before calling
+	if note_spawner and note_spawner.has_method("start_spawning"):
+		note_spawner.start_spawning()
+	else:
+		print("Note spawner not ready")
 
 func _input(event):
 	if event.is_action_pressed("pause_game"):

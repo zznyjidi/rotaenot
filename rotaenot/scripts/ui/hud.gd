@@ -8,6 +8,8 @@ func _ready():
 	pass
 
 func update_score(score: int):
+	if not score_label:
+		return
 	score_label.text = "Score: " + str(score)
 
 	var tween = get_tree().create_tween()
@@ -15,6 +17,8 @@ func update_score(score: int):
 	tween.tween_property(score_label, "scale", Vector2(1.0, 1.0), 0.1)
 
 func update_combo(combo: int):
+	if not combo_label:
+		return
 	combo_label.text = "Combo: " + str(combo)
 
 	if combo > 0:
@@ -33,6 +37,8 @@ func update_combo(combo: int):
 		combo_label.modulate = Color(0.7, 0.7, 0.7, 1)
 
 func update_accuracy(accuracy: float):
+	if not accuracy_label:
+		return
 	accuracy_label.text = "Accuracy: %.1f%%" % accuracy
 
 	if accuracy >= 95:

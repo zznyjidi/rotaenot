@@ -48,7 +48,7 @@ rotaenot/
 │   ├── gyro_processor.py  # Process gyroscope data
 │   └── server.py          # Backend server (if needed)
 └── docs/                  # Documentation
-    └── DEVELOPMENT.md     # Development notes
+	└── DEVELOPMENT.md     # Development notes
 ```
 
 ## Technical Stack

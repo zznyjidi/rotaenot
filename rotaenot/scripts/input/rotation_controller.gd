@@ -99,7 +99,7 @@ func _check_basket_position():
 			basket_entered.emit(new_basket)
 		current_basket = new_basket
 
-func set_rotation(degrees: float):
+func set_rotation_angle(degrees: float):
 	var radians = deg_to_rad(degrees)
 	current_rotation = radians
 	target_rotation = radians
