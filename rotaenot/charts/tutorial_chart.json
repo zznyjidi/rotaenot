@@ -1,0 +1,81 @@
+{
+  "metadata": {
+    "title": "Tutorial",
+    "artist": "System",
+    "difficulty": "Easy",
+    "bpm": 100,
+    "offset": 0
+  },
+  "notes": [
+    {
+      "time": 1.0,
+      "pad": 0,
+      "switch_to": -1,
+      "type": "tap",
+      "comment": "Simple tap on left top"
+    },
+    {
+      "time": 2.0,
+      "pad": 1,
+      "switch_to": -1,
+      "type": "tap",
+      "comment": "Simple tap on left middle"
+    },
+    {
+      "time": 3.0,
+      "pad": 2,
+      "switch_to": -1,
+      "type": "tap",
+      "comment": "Simple tap on left bottom"
+    },
+    {
+      "time": 4.0,
+      "pad": 3,
+      "switch_to": -1,
+      "type": "tap",
+      "comment": "Simple tap on right top"
+    },
+    {
+      "time": 5.0,
+      "pad": 4,
+      "switch_to": -1,
+      "type": "tap",
+      "comment": "Simple tap on right middle"
+    },
+    {
+      "time": 6.0,
+      "pad": 5,
+      "switch_to": -1,
+      "type": "tap",
+      "comment": "Simple tap on right bottom"
+    },
+    {
+      "time": 8.0,
+      "pad": 1,
+      "switch_to": 0,
+      "type": "switch",
+      "comment": "Switch from left middle to left top"
+    },
+    {
+      "time": 9.0,
+      "pad": 1,
+      "switch_to": 2,
+      "type": "switch",
+      "comment": "Switch from left middle to left bottom"
+    },
+    {
+      "time": 10.0,
+      "pad": 4,
+      "switch_to": 3,
+      "type": "switch",
+      "comment": "Switch from right middle to right top"
+    },
+    {
+      "time": 11.0,
+      "pad": 4,
+      "switch_to": 5,
+      "type": "switch",
+      "comment": "Switch from right middle to right bottom"
+    }
+  ]
+}
