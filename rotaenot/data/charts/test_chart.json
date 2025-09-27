@@ -1,0 +1,23 @@
+{
+  "title": "Test Song",
+  "artist": "Rotaenot Team",
+  "bpm": 120,
+  "difficulty": 5,
+  "audio_file": "test_song.ogg",
+  "preview_time": 10.0,
+  "offset": 0.0,
+  "notes": [
+    {"time": 1.0, "position": 0, "type": "tap"},
+    {"time": 1.5, "position": 45, "type": "tap"},
+    {"time": 2.0, "position": 90, "type": "catch"},
+    {"time": 2.5, "position": 135, "type": "tap"},
+    {"time": 3.0, "position": 180, "type": "tap"},
+    {"time": 3.5, "position": 225, "type": "flick", "direction": "up"},
+    {"time": 4.0, "position": 270, "type": "catch"},
+    {"time": 4.5, "position": 315, "type": "tap"},
+    {"time": 5.0, "position": 0, "type": "hold", "duration": 1.0},
+    {"time": 6.5, "position": 90, "type": "tap"},
+    {"time": 7.0, "position": 180, "type": "tap"},
+    {"time": 7.5, "position": 270, "type": "catch"}
+  ]
+}
