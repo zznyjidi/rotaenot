@@ -89,4 +89,8 @@ func show_judgment(judgment: String):
 	tween.parallel().tween_property(judgment_label, "modulate:a", 1.0, 0.1)
 	tween.tween_property(judgment_label, "scale", Vector2(1.0, 1.0), 0.1)
 	tween.tween_property(judgment_label, "modulate:a", 0.0, 0.3)
-	tween.tween_callback(func(): judgment_label.visible = false)
+	tween.tween_callback(_hide_judgment)
+
+func _hide_judgment():
+	if judgment_label:
+		judgment_label.visible = false
