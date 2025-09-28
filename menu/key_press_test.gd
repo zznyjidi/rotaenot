@@ -8,7 +8,7 @@ const parser = preload("res://game/chart/chart_parser.gd")
 func _ready():
 	judgementKey.swap(4, 6)
 	
-	var chart = parser.parse_chart("res://data/charts/tutorial/easy.chart")
+	var chart = parser.parse_chart("res://assets/charts/tutorial/easy.chart")
 	
 	judgement.set_tracks(chart)
 	judgementKey.reset()
