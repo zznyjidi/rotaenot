@@ -104,6 +104,46 @@ static var songs = [
 		"high_scores": {
 			"Normal": 0
 		}
+	},
+	{
+		"id": "tobu_faster",
+		"title": "Faster",
+		"artist": "Tobu",
+		"bpm": 128,
+		"duration": "3:13",
+		"chart_path": "res://charts/tobu_faster_normal.json",  # Default to normal
+		"music_path": "res://assets/music/Tobu - Faster [NCS Release].mp3",
+		"preview_image": "res://assets/ui/song_covers/demo.png",  # Placeholder
+		"difficulties": {
+			"Easy": {"level": 3, "notes": 32, "chart_path": "res://charts/tobu_faster_easy.json"},
+			"Normal": {"level": 5, "notes": 199, "chart_path": "res://charts/tobu_faster_normal.json"},
+			"Hard": {"level": 8, "notes": 1070, "chart_path": "res://charts/tobu_faster_hard.json"},
+			"Expert": {"level": 11, "notes": 2319, "chart_path": "res://charts/tobu_faster_expert.json"}
+		},
+		"unlock_status": true,
+		"high_scores": {
+			"Easy": 0,
+			"Normal": 0,
+			"Hard": 0,
+			"Expert": 0
+		}
+	},
+	{
+		"id": "skyline_pt2",
+		"title": "Skyline Pt. II",
+		"artist": "Electro-Light & Kovan",
+		"bpm": 140,
+		"duration": "3:45",
+		"chart_path": "res://charts/skyline_hell_generated.json",
+		"music_path": "res://assets/music/Electro-Light, Kovan - Skyline Pt. II [NCS Release].mp3",
+		"preview_image": "res://assets/ui/song_covers/electronic.png",  # Placeholder
+		"difficulties": {
+			"Hell": {"level": 15, "notes": 2734, "chart_path": "res://charts/skyline_hell_generated.json"}
+		},
+		"unlock_status": true,
+		"high_scores": {
+			"Hell": 0
+		}
 	}
 ]
 
