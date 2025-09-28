@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/song_select.gd" id="1_song_select"]
-[ext_resource type="Texture2D" path="res://assets/textures/ui/UnSelect_Menu.png" id="2_unselect_bg"]
-[ext_resource type="Texture2D" path="res://assets/textures/ui/Select_Menu.png" id="3_select_bg"]
-[ext_resource type="Texture2D" path="res://assets/ui/menu_backgrounds/Top_menu.png" id="4_top_menu"]
+[ext_resource type="Texture2D" path="res://assets/ui/backgrounds/file_0052.png" id="2_main_bg"]
+[ext_resource type="Texture2D" path="res://assets/textures/ui/UnSelect_Menu.png" id="3_unselect_bg"]
+[ext_resource type="Texture2D" path="res://assets/textures/ui/Select_Menu.png" id="4_select_bg"]
 
 [node name="SongSelect" type="Control"]
 layout_mode = 3
@@ -18,27 +18,46 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="UnSelectBackground" type="TextureRect" parent="BackgroundLayer"]
+[node name="MainBackground" type="TextureRect" parent="BackgroundLayer"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-texture = ExtResource("2_unselect_bg")
+texture = ExtResource("2_main_bg")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="DarkOverlay" type="ColorRect" parent="BackgroundLayer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.4)
+
+[node name="UnSelectBackground" type="TextureRect" parent="BackgroundLayer"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+modulate = Color(1, 1, 1, 0.5)
+texture = ExtResource("3_unselect_bg")
 expand_mode = 1
 stretch_mode = 6
 
 [node name="SelectBackground" type="TextureRect" parent="BackgroundLayer"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-modulate = Color(1, 1, 1, 0)
-texture = ExtResource("3_select_bg")
+modulate = Color(1, 1, 1, 0.5)
+texture = ExtResource("4_select_bg")
 expand_mode = 1
 stretch_mode = 6
 
 [node name="Background" type="ColorRect" parent="."]
-visible = true
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -182,11 +201,3 @@ theme_override_colors/font_color = Color(1, 0.8, 0.3, 1)
 text = "High Score: 0"
 horizontal_alignment = 1
 
-[node name="TopMenuBar" type="TextureRect" parent="."]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 80.0
-texture = ExtResource("4_top_menu")
-expand_mode = 0
-stretch_mode = 0

@@ -2,10 +2,11 @@ extends Control
 
 # Settings menu for configuring keymaps and other options
 
-@onready var key_button_container = $Panel/VBoxContainer/KeymapSection/GridContainer
-@onready var volume_master = $Panel/VBoxContainer/AudioSection/MasterVolume
-@onready var volume_music = $Panel/VBoxContainer/AudioSection/MusicVolume
-@onready var volume_sfx = $Panel/VBoxContainer/AudioSection/SFXVolume
+@onready var key_button_container = $Panel/ScrollContainer/VBoxContainer/KeymapSection/GridContainer
+@onready var volume_master = $Panel/ScrollContainer/VBoxContainer/AudioSection/MasterVolume
+@onready var volume_music = $Panel/ScrollContainer/VBoxContainer/AudioSection/MusicVolume
+@onready var volume_sfx = $Panel/ScrollContainer/VBoxContainer/AudioSection/SFXVolume
+@onready var fps_toggle = $Panel/ScrollContainer/VBoxContainer/DisplaySection/FPSContainer/FPSToggle
 
 var key_buttons = []
 var waiting_for_key = -1  # Which pad index we're waiting for key input
@@ -55,7 +56,12 @@ func _load_settings():
 	if volume_sfx:
 		volume_sfx.value = SettingsManager.sfx_volume * 100
 
+	# Load display settings
+	if fps_toggle:
+		fps_toggle.button_pressed = SettingsManager.show_fps
+
 func _on_key_button_pressed(pad_index: int):
+	UISoundManager.play_selection_sound()
 	waiting_for_key = pad_index
 	key_buttons[pad_index].text = "Press key..."
 
@@ -100,11 +106,23 @@ func _on_sfx_volume_changed(value: float):
 	SettingsManager.sfx_volume = value / 100.0
 	SettingsManager.save_settings()
 
+func _on_fps_toggle_toggled(button_pressed: bool):
+	UISoundManager.play_selection_sound()
+	SettingsManager.show_fps = button_pressed
+	SettingsManager.save_settings()
+
+	# Update FPS display immediately
+	if get_tree().root.has_node("FPSDisplay"):
+		var fps_display = get_tree().root.get_node("FPSDisplay")
+		fps_display.visible = button_pressed
+
 func _on_reset_button_pressed():
+	UISoundManager.play_selection_sound()
 	SettingsManager.reset_keymap_to_default()
 	_load_settings()
 
 func _on_back_button_pressed():
+	UISoundManager.play_selection_sound()
 	_go_back()
 
 func _go_back():

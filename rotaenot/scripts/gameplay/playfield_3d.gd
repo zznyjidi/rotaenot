@@ -113,16 +113,32 @@ func _create_single_pad(config: Dictionary, index: int) -> Node2D:
 	pad_visual.points = arc_points
 	pad.add_child(pad_visual)
 
-	# Add key label outside the ellipse
+	# Add key label ON the pad itself
 	var label = Label.new()
-	label.text = config.key
-	label.add_theme_font_size_override("font_size", 18)
-	# Position label outside based on side
-	var label_offset = 40.0
-	if config.side == "left":
-		label.position = Vector2(-label_offset, -10)
+	# Get actual keybinding from SettingsManager
+	var keymap = {}
+	if SettingsManager:
+		keymap = SettingsManager.get_keymap_dict()
 	else:
-		label.position = Vector2(label_offset - 10, -10)
+		# Fallback to defaults
+		keymap = {"W": 0, "E": 1, "F": 2, "J": 3, "I": 4, "O": 5}
+
+	# Find the actual key for this pad
+	var actual_key = config.key  # Default
+	for key in keymap:
+		if keymap[key] == index:
+			actual_key = key
+			break
+
+	label.text = actual_key
+	label.add_theme_font_size_override("font_size", 16)
+	label.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6, 0.5))  # Grey with lower opacity
+	# Position label slightly inside the ellipse from the pad
+	# Offset based on which side the pad is on
+	if config.side == "left":
+		label.position = Vector2(25, -10)  # Move right and slightly up for left pads
+	else:
+		label.position = Vector2(-35, -10)  # Move left and slightly up for right pads
 	pad.add_child(label)
 
 	# Store pad data

@@ -29,11 +29,28 @@ const SELECTED_ALPHA = 1.0
 # Selected difficulty
 var selected_difficulty: String = "Normal"
 
+# Music preview
+@onready var preview_player = AudioStreamPlayer.new()
+var preview_fade_timer: Timer
+var current_preview_song: int = -1
+
 func _ready():
 	# Start with fade in
 	modulate.a = 0.0
 	var fade_in = create_tween()
 	fade_in.tween_property(self, "modulate:a", 1.0, 0.3)
+
+	# Setup music preview player
+	add_child(preview_player)
+	preview_player.bus = "Master"
+	preview_player.volume_db = -15  # Quieter for preview
+
+	# Setup preview fade timer
+	preview_fade_timer = Timer.new()
+	add_child(preview_fade_timer)
+	preview_fade_timer.wait_time = 0.3  # Short delay before playing preview
+	preview_fade_timer.one_shot = true
+	preview_fade_timer.timeout.connect(_start_preview_playback)
 
 	# Load songs from database
 	songs = SongDatabase.get_all_songs()
@@ -44,6 +61,29 @@ func _ready():
 	# Select first song
 	if songs.size() > 0:
 		_select_song(0)
+
+func _input(event):
+	# Navigation with arrow keys and enter
+	if event.is_action_pressed("ui_up"):
+		# Navigate up in song list
+		if current_index > 0:
+			_select_song(current_index - 1)
+	elif event.is_action_pressed("ui_down"):
+		# Navigate down in song list
+		if current_index < songs.size() - 1:
+			_select_song(current_index + 1)
+	elif event.is_action_pressed("ui_left"):
+		# Change difficulty left
+		_change_difficulty(-1)
+	elif event.is_action_pressed("ui_right"):
+		# Change difficulty right
+		_change_difficulty(1)
+	elif event.is_action_pressed("ui_accept"):
+		# Start game with selected song and difficulty
+		_start_game()
+	elif event.is_action_pressed("ui_cancel"):
+		# Go back to main menu
+		_go_back()
 
 func _create_song_list():
 	# Clear existing items
@@ -147,19 +187,7 @@ func _get_difficulty_color(difficulty: String) -> Color:
 		_:
 			return Color.WHITE
 
-func _input(event):
-	if event.is_action_pressed("ui_up"):
-		_navigate(-1)
-	elif event.is_action_pressed("ui_down"):
-		_navigate(1)
-	elif event.is_action_pressed("ui_accept"):
-		_start_game()
-	elif event.is_action_pressed("ui_cancel"):
-		_go_back()
-	elif event.is_action_pressed("ui_left"):
-		_change_difficulty(-1)
-	elif event.is_action_pressed("ui_right"):
-		_change_difficulty(1)
+# Duplicate _input function removed - navigation is handled by the first _input function at line 48
 
 func _navigate(direction: int):
 	var new_index = current_index + direction
@@ -173,6 +201,10 @@ func _navigate(direction: int):
 	_select_song(new_index)
 
 func _select_song(index: int):
+	# Play a light navigation sound (using the same sound at lower volume for now)
+	if current_index != index:  # Only play if actually changing selection
+		UISoundManager.play_selection_sound()
+
 	current_index = index
 	var song = songs[current_index]
 
@@ -189,6 +221,12 @@ func _select_song(index: int):
 
 	# Animate background transition
 	_animate_background_selection()
+
+	# Start preview music after a short delay
+	if current_preview_song != index:
+		current_preview_song = index
+		preview_fade_timer.stop()
+		preview_fade_timer.start()
 
 func _update_item_visual(item: Control, is_selected: bool, distance: int):
 	# Calculate scale and alpha based on distance from selected
@@ -271,6 +309,7 @@ func _update_info_panel(song: Dictionary):
 		selected_difficulty = first_diff
 
 func _on_difficulty_selected(difficulty: String):
+	UISoundManager.play_selection_sound()
 	selected_difficulty = difficulty
 	_update_info_panel(songs[current_index])
 
@@ -297,7 +336,11 @@ func _start_game():
 	if not song.unlock_status:
 		# Show locked message
 		print("This song is locked!")
+		# Could play an error sound here
 		return
+
+	# Play selection sound for starting game
+	UISoundManager.play_selection_sound()
 
 	# Check if this difficulty has a specific chart path
 	var song_copy = song.duplicate(true)
@@ -310,6 +353,10 @@ func _start_game():
 	GameData.selected_song = song_copy
 	GameData.selected_difficulty = selected_difficulty
 
+	# Stop preview music
+	if preview_player:
+		preview_player.stop()
+
 	# Fade out before transitioning
 	var fade_out = create_tween()
 	fade_out.tween_property(self, "modulate:a", 0.0, 0.2)
@@ -319,6 +366,10 @@ func _start_game():
 	get_tree().change_scene_to_file("res://scenes/ui/loading_transition.tscn")
 
 func _go_back():
+	# Stop preview music
+	if preview_player:
+		preview_player.stop()
+
 	# Fade out before going back
 	var fade_out = create_tween()
 	fade_out.tween_property(self, "modulate:a", 0.0, 0.2)
@@ -395,3 +446,40 @@ func _load_and_scale_preview_image(image_path: String):
 	preview_image.modulate.a = 0.0
 	var tween = create_tween()
 	tween.tween_property(preview_image, "modulate:a", 1.0, 0.2)
+
+func _start_preview_playback():
+	# Stop current preview if playing
+	if preview_player.playing:
+		var fade_out = create_tween()
+		fade_out.tween_property(preview_player, "volume_db", -60.0, 0.2)
+		await fade_out.finished
+		preview_player.stop()
+
+	# Get current song
+	if current_index >= 0 and current_index < songs.size():
+		var song = songs[current_index]
+
+		# Check if song has a music path
+		if song.has("music_path") and song.music_path != "":
+			var music_path = song.music_path
+
+			# Check if file exists
+			if FileAccess.file_exists(music_path):
+				print("Playing preview: ", music_path)
+
+				# Load and play the music
+				var stream = load(music_path)
+				if stream:
+					preview_player.stream = stream
+					preview_player.volume_db = -60.0  # Start quiet
+					preview_player.play()
+
+					# Fade in the preview
+					var fade_in = create_tween()
+					fade_in.tween_property(preview_player, "volume_db", -15.0, 0.5)
+				else:
+					print("Failed to load preview: ", music_path)
+			else:
+				print("Music file not found: ", music_path)
+		else:
+			print("No music path for song: ", song.title if song.has("title") else "Unknown")

@@ -205,7 +205,9 @@ func _update_visual_from_tracks():
 
 func get_hit_distance() -> float:
 	# Distance from the pad (end of track)
-	return abs(1.0 - progress) * 100.0  # Convert to pixel-like distance
+	# This represents timing distance - positive means note hasn't reached pad yet,
+	# negative means it's past the pad
+	return (1.0 - progress) * 100.0  # Convert to standardized distance units
 
 func _initiate_track_switch():
 	if new_pad < 0 or new_pad == original_pad:

@@ -187,6 +187,7 @@ func _animate_new_record():
 	tween.tween_property(new_record_label, "modulate:a", 1.0, 0.2)
 
 func _on_retry_button_pressed():
+	UISoundManager.play_selection_sound()
 	# Fade out
 	var tween = create_tween()
 	tween.tween_property(self, "modulate:a", 0.0, 0.3)
@@ -196,6 +197,7 @@ func _on_retry_button_pressed():
 	get_tree().change_scene_to_file("res://scenes/gameplay/gameplay_3d.tscn")
 
 func _on_menu_button_pressed():
+	UISoundManager.play_selection_sound()
 	# Fade out
 	var tween = create_tween()
 	tween.tween_property(self, "modulate:a", 0.0, 0.3)
@@ -204,8 +206,5 @@ func _on_menu_button_pressed():
 	# Return to song select
 	get_tree().change_scene_to_file("res://scenes/ui/song_select.tscn")
 
-func _input(event):
-	if event.is_action_pressed("ui_accept"):
-		_on_retry_button_pressed()
-	elif event.is_action_pressed("ui_cancel"):
-		_on_menu_button_pressed()
+# Remove the _input function as it's interfering with button clicks
+# The buttons already have their signals connected properly

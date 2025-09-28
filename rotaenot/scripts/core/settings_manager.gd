@@ -22,6 +22,7 @@ var keymap = {}
 var master_volume: float = 0.8
 var sfx_volume: float = 1.0
 var music_volume: float = 0.7
+var show_fps: bool = false  # FPS display preference
 
 func _ready():
 	# Load settings on startup
@@ -55,6 +56,10 @@ func load_settings():
 	if config.has_section_key("audio", "music_volume"):
 		music_volume = config.get_value("audio", "music_volume")
 
+	# Load display settings
+	if config.has_section_key("display", "show_fps"):
+		show_fps = config.get_value("display", "show_fps")
+
 	print("Settings loaded successfully")
 
 func save_settings():
@@ -68,6 +73,9 @@ func save_settings():
 	config.set_value("audio", "master_volume", master_volume)
 	config.set_value("audio", "sfx_volume", sfx_volume)
 	config.set_value("audio", "music_volume", music_volume)
+
+	# Save display settings
+	config.set_value("display", "show_fps", show_fps)
 
 	# Save to file
 	var err = config.save(SETTINGS_FILE)

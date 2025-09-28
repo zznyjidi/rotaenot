@@ -7,16 +7,17 @@ var audio_bus_index: int = 0
 var spectrum_analyzer: AudioEffectSpectrumAnalyzerInstance
 
 # Visualization properties
-var num_bars: int = 32  # Number of bars around the diamond
-var radius_base: float = 250.0  # Base radius from diamond center (bigger than diamond)
-var radius_response: float = 60.0  # Max extension of bars
-var bar_width: float = 4.0
-var bar_base_height: float = 8.0
-var bar_max_height: float = 40.0
+var num_bars: int = 48  # More bars for smoother visualization
+var radius_base: float = 320.0  # Bigger base radius for larger visualizer
+var radius_response: float = 80.0  # Increased max extension of bars
+var bar_width: float = 3.0  # Slightly thinner for more bars
+var bar_base_height: float = 10.0
+var bar_max_height: float = 60.0  # Taller bars for more dramatic effect
 
-# Visual colors - matching the futuristic theme
-var bar_color_base = Color(0.4, 0.8, 1.0, 0.3)  # Cyan with low opacity
-var bar_color_active = Color(0.5, 0.9, 1.0, 0.8)  # Brighter cyan when active
+# Visual colors - matching the futuristic theme with more vibrant colors
+var bar_color_base = Color(0.3, 0.7, 1.0, 0.4)  # Cyan with medium opacity
+var bar_color_active = Color(0.6, 1.0, 1.0, 0.9)  # Bright cyan when active
+var bar_color_peak = Color(1.0, 0.8, 0.2, 1.0)  # Golden color for peaks
 
 # Bars array
 var bars = []
@@ -24,7 +25,7 @@ var bar_values = []  # Smoothed values for each bar
 var bar_targets = []  # Target values for smooth animation
 
 # Rotation for visual interest
-var rotation_speed: float = 0.5  # Slow rotation
+var rotation_speed: float = 0.15  # Much slower rotation
 var auto_rotate: bool = true
 
 # Diamond reference
@@ -51,7 +52,7 @@ class VisualizerBar:
 
 func _ready():
 	# Set z_index to be behind menu options but above background
-	z_index = 8  # Diamond is at 10, options at 5, so 8 puts us between
+	z_index = 3  # Below menu options (5) but above background
 
 	# Setup audio analyzer
 	_setup_audio_analyzer()
@@ -107,16 +108,21 @@ func _process(delta):
 	# Update time for autonomous animation
 	time_elapsed += delta
 
-	# Auto rotation
-	if auto_rotate:
-		rotation += rotation_speed * delta
-
 	# Check if we have audio or should use idle animation
 	var has_audio = false
 	if spectrum_analyzer:
 		# Try to detect if there's any audio playing
 		var magnitude = spectrum_analyzer.get_magnitude_for_frequency_range(20, 20000).length()
 		has_audio = magnitude > 0.001
+
+	# Auto rotation - speed up slightly with bass response
+	if auto_rotate:
+		var bass_boost = 0.0
+		if spectrum_analyzer and has_audio:
+			# Get bass frequencies for rotation speed boost
+			var bass_mag = spectrum_analyzer.get_magnitude_for_frequency_range(20, 200).length()
+			bass_boost = clamp(linear_to_db(bass_mag) + 80, 0, 1) * 0.1  # Much less boost
+		rotation += (rotation_speed + bass_boost) * delta
 
 		if has_audio:
 			# Update spectrum data from actual audio
@@ -130,8 +136,8 @@ func _process(delta):
 	for i in range(bars.size()):
 		var bar = bars[i]
 
-		# Smooth animation
-		bar_values[i] = lerp(bar_values[i], bar_targets[i], 10.0 * delta)
+		# Smooth animation - faster response for music
+		bar_values[i] = lerp(bar_values[i], bar_targets[i], 15.0 * delta)
 
 		# Calculate bar position
 		var angle = bar.angle + rotation
@@ -146,42 +152,52 @@ func _process(delta):
 		bar.line.add_point(inner_point)
 		bar.line.add_point(outer_point)
 
-		# Update color based on intensity
+		# Update color based on intensity with peak color
 		var intensity = bar_values[i]
-		bar.line.default_color = bar_color_base.lerp(bar_color_active, intensity)
+		if intensity > 0.8:
+			# Use peak color for high intensity
+			bar.line.default_color = bar_color_active.lerp(bar_color_peak, (intensity - 0.8) / 0.2)
+		else:
+			bar.line.default_color = bar_color_base.lerp(bar_color_active, intensity)
 
 		# Add glow effect for high intensity
 		if intensity > 0.7:
-			bar.line.width = bar_width * (1.0 + intensity * 0.3)
+			bar.line.width = bar_width * (1.0 + intensity * 0.5)
 		else:
 			bar.line.width = bar_width
 
 func _update_spectrum_data():
 	# Define frequency ranges for visualization
+	# Use logarithmic frequency distribution for better musical response
 	var min_freq = 20.0
-	var max_freq = 8000.0
-
-	# Calculate frequency range per bar
-	var freq_range = (max_freq - min_freq) / num_bars
+	var max_freq = 10000.0
 
 	for i in range(num_bars):
-		# Calculate frequency range for this bar
-		var start_freq = min_freq + i * freq_range
-		var end_freq = start_freq + freq_range
+		# Logarithmic frequency distribution - better for music
+		var t = float(i) / float(num_bars)
+		var log_min = log(min_freq)
+		var log_max = log(max_freq)
+		var log_freq = log_min + (log_max - log_min) * t
+		var start_freq = exp(log_freq)
+		var end_freq = exp(log_freq + (log_max - log_min) / num_bars)
 
 		# Get magnitude for this frequency range
 		var magnitude = spectrum_analyzer.get_magnitude_for_frequency_range(start_freq, end_freq)
 
-		# Convert to decibels and normalize
+		# Convert to decibels and normalize with better sensitivity
 		var db = linear_to_db(magnitude.length())
-		var normalized = clamp((db + 60.0) / 60.0, 0.0, 1.0)
+		var normalized = clamp((db + 80.0) / 80.0, 0.0, 1.0)  # More sensitive
 
-		# Apply logarithmic scaling for better visual response
-		normalized = pow(normalized, 0.8)
+		# Apply power scaling for better visual response
+		normalized = pow(normalized, 0.6)  # Less aggressive scaling for more movement
+
+		# Add a minimum movement to make it more lively
+		if normalized > 0.01:
+			normalized = max(normalized, 0.1)
 
 		# Mirror effect for symmetry (optional)
 		# Makes opposite sides respond similarly
-		if i < int(num_bars / 2):
+		if i < int(num_bars / 2.0):
 			var mirror_index = num_bars - 1 - i
 			var avg = (normalized + bar_targets[mirror_index]) * 0.5
 			bar_targets[i] = avg
@@ -235,7 +251,7 @@ func _update_idle_animation():
 		bar_targets[i] = combined
 
 		# Create symmetric patterns
-		if i < int(num_bars / 2):
+		if i < int(num_bars / 2.0):
 			var mirror_index = num_bars - 1 - i
 			var avg = (bar_targets[i] + bar_targets[mirror_index]) * 0.5
 			bar_targets[i] = avg

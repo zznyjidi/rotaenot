@@ -12,7 +12,7 @@ extends Node2D
 var score = 0
 var combo = 0
 var max_combo = 0
-var life = 100
+var life = 100  # Will be adjusted based on difficulty
 var miss_count = 0
 var is_paused = false
 var pause_menu = null
@@ -46,6 +46,22 @@ func _ready():
 	# Set up input actions dynamically if needed
 	_setup_input_actions()
 
+	# Set life based on difficulty
+	if GameData and GameData.selected_difficulty:
+		match GameData.selected_difficulty:
+			"Easy":
+				life = 150  # More forgiving
+			"Normal":
+				life = 100  # Standard
+			"Hard":
+				life = 75   # Less margin for error
+			"Hell":
+				life = 50   # Very challenging
+			_:
+				life = 100  # Default
+	else:
+		life = 100  # Default if no difficulty selected
+
 	# Initialize HUD
 	hud.update_score(score)
 	hud.update_combo(combo)
@@ -55,6 +71,7 @@ func _ready():
 		playfield.update_combo_display(combo)
 	hud.update_life(life)
 	hud.update_miss(miss_count)
+
 
 	# Create pause menu (initially hidden)
 	_create_pause_menu()
@@ -104,8 +121,8 @@ func _process(_delta):
 	for note in notes:
 		if note.has_meta("target_pad") and note.has_method("get_hit_distance"):
 			var dist = note.get_hit_distance()
-			# Note has gone too far past the pad
-			if dist < -50:
+			# Note has gone too far past the pad (more than 15 frames late)
+			if dist < -12.5:  # Beyond max hit window
 				_auto_miss_note(note)
 
 	# Check if song is finished (no spawner and no notes left)
@@ -163,8 +180,10 @@ func _try_hit_pad(pad_index: int):
 
 		if note.has_method("get_hit_distance"):
 			var dist = note.get_hit_distance()
-			if dist < best_distance and dist < 100:  # Within hit window
-				best_distance = dist
+			var abs_dist = abs(dist)
+			# Max hit window is ±15 frames = 12.5 distance units
+			if abs_dist < best_distance and abs_dist < 12.5:  # Within max hit window
+				best_distance = abs_dist
 				best_note = note
 
 	if best_note:
@@ -176,26 +195,45 @@ func _hit_note(note: Node2D, distance: float):
 	var judgment = ""
 	total_notes += 1
 
-	if distance < 20:
+	# Convert distance to time-based windows (frames at 60fps)
+	# Distance of 100 = 1.0 progress difference, with speed of 0.5 = 2 seconds
+	# So distance of 100 = 2 seconds = 120 frames at 60fps
+	# This gives us: 1 frame = 0.833 distance units
+
+	# Time windows in frames (at 60fps):
+	# PERFECT: ±3 frames (50ms)
+	# GREAT: ±6 frames (100ms)
+	# GOOD: ±10 frames (167ms)
+	# BAD: ±15 frames (250ms)
+
+	var frame_distance = 0.833  # Distance units per frame
+
+	if distance < 3 * frame_distance:  # ±3 frames
 		judgment = "PERFECT"
 		score += 1000
 		combo += 1
 		perfect_count += 1
-	elif distance < 40:
+	elif distance < 6 * frame_distance:  # ±6 frames
 		judgment = "GREAT"
 		score += 800
 		combo += 1
 		great_count += 1
-	elif distance < 60:
+	elif distance < 10 * frame_distance:  # ±10 frames
 		judgment = "GOOD"
 		score += 500
 		combo += 1
 		good_count += 1
-	else:
+	elif distance < 15 * frame_distance:  # ±15 frames
 		judgment = "BAD"
 		score += 100
 		combo = 0
 		bad_count += 1
+	else:
+		# Too far - treat as miss
+		judgment = "MISS"
+		combo = 0
+		miss_count += 1
+		life = max(0, life - 3)
 
 	max_combo = max(max_combo, combo)
 
@@ -248,6 +286,7 @@ func _auto_miss_note(note: Node2D):
 		playfield.update_combo_display(combo)
 	hud.update_miss(miss_count)
 	hud.update_life(life)
+	hud.show_judgment("MISS")
 
 	note.queue_free()
 
@@ -397,9 +436,11 @@ func _toggle_pause():
 			music_player.stream_paused = false
 
 func _on_continue_pressed():
+	UISoundManager.play_selection_sound()
 	_toggle_pause()
 
 func _on_quit_pressed():
+	UISoundManager.play_selection_sound()
 	# Clean up
 	get_tree().paused = false
 	if music_player:
@@ -409,6 +450,7 @@ func _on_quit_pressed():
 	get_tree().change_scene_to_file("res://scenes/ui/song_select.tscn")
 
 func _on_restart_pressed():
+	UISoundManager.play_selection_sound()
 	# Clean up current state
 	get_tree().paused = false
 	if music_player:
