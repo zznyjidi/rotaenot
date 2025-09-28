@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://gr2ce1yxm3g5"]
+
+[ext_resource type="Script" uid="uid://bydgfyh5vo45j" path="res://game/chart/judgement.gd" id="1_fui2m"]
+
+[node name="JudgementTimer" type="Timer"]
+wait_time = 0.001
+script = ExtResource("1_fui2m")
+
+[connection signal="timeout" from="." to="." method="frame"]

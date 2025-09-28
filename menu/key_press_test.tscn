@@ -1,0 +1,52 @@
+[gd_scene load_steps=3 format=3 uid="uid://drqimfil5tdsv"]
+
+[ext_resource type="Script" uid="uid://omhuf75ni3fu" path="res://menu/key_press_test.gd" id="1_x558x"]
+[ext_resource type="PackedScene" uid="uid://gr2ce1yxm3g5" path="res://game/chart/judgement_timer.tscn" id="2_lnnxu"]
+
+[node name="KeyPressTest" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(576, 324)
+
+[node name="KeyLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -140.75
+offset_top = -147.75
+offset_right = 130.95313
+offset_bottom = -118.25
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(4, 4)
+pivot_offset = Vector2(135.95313, 14.691406)
+text = "KEY1, KEY2, KEY3, KEY4, KEY5, KEY6"
+
+[node name="KeyStatus" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -49.0
+offset_top = -11.5
+offset_right = 49.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(8, 8)
+pivot_offset = Vector2(49.041016, 11.451172)
+text = "0, 0, 0, 0, 0, 0"
+script = ExtResource("1_x558x")
+
+[node name="JudgementTimer" parent="." instance=ExtResource("2_lnnxu")]
+
+[connection signal="key_status_updated" from="JudgementTimer" to="KeyStatus" method="_on_judgement_timer_key_status_updated"]
