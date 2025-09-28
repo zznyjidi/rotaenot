@@ -6,7 +6,8 @@ var chart_finished: bool = false
 
 # Chart system
 var chart_loader: ChartLoader
-var song_time: float = 0.0
+var song_time_ms: float = 0.0  # Time in milliseconds
+var spawn_offset_ms: float = 800.0  # Spawn notes 800ms early for travel time
 var chart_loaded: bool = false
 var default_chart_path = "res://charts/demo_chart.json"
 
@@ -48,7 +49,7 @@ func is_finished() -> bool:
 
 func load_chart(chart_path: String) -> bool:
 	# Load a specific chart file
-	song_time = 0.0
+	song_time_ms = 0.0
 
 	if chart_loader.load_chart(chart_path):
 		chart_loaded = true
@@ -62,7 +63,7 @@ func load_chart(chart_path: String) -> bool:
 
 func reset():
 	# Reset the spawner for replay
-	song_time = 0.0
+	song_time_ms = 0.0
 	chart_finished = false
 	if chart_loader:
 		chart_loader.reset()
@@ -73,7 +74,8 @@ func _process(delta):
 	if not is_spawning:
 		return
 
-	song_time += delta
+	# Update time in milliseconds
+	song_time_ms += delta * 1000.0
 
 	if chart_loaded and not use_fallback:
 		# Use chart-based spawning
@@ -85,9 +87,12 @@ func _process(delta):
 func _process_chart():
 	# Check if it's time to spawn the next note
 	while chart_loader.has_more_notes():
-		var next_time = chart_loader.get_next_note_time()
-		if next_time <= song_time:
+		var next_time_ms = chart_loader.get_next_note_time()
+		# Spawn notes early so they have time to travel
+		if next_time_ms <= song_time_ms + spawn_offset_ms:
 			var note_data = chart_loader.get_next_note()
+			# Add the actual hit time to the note data
+			note_data["hit_time_ms"] = note_data.get("time", 0)
 			_spawn_note_from_data(note_data)
 		else:
 			break
@@ -114,8 +119,9 @@ func _spawn_note_from_data(note_data: Dictionary):
 	if not playfield or not note_container:
 		return
 
-	var target_pad = note_data.get("pad", 0)
-	var switch_to_pad = note_data.get("switch_to", -1)
+	# Get track from note data (0-5)
+	var target_pad = note_data.get("track", note_data.get("pad", 0))
+	var switch_to_pad = note_data.get("target_track", note_data.get("switch_to", -1))
 
 	# Get the two track lines for this pad
 	var track_idx = target_pad * 2  # Each pad has 2 tracks

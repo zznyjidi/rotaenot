@@ -570,7 +570,7 @@ func update_center_mask():
 	var gameplay_scene = get_parent().get_parent() if get_parent() else null
 	var bg_layer = gameplay_scene.get_node_or_null("BackgroundLayer") if gameplay_scene else null
 	var bg_image = bg_layer.get_node_or_null("BackgroundImage") if bg_layer else null
-	var blur_overlay = bg_layer.get_node_or_null("BlurOverlay") if bg_layer else null
+	# blur_overlay not needed in this function
 
 	print("Update mask - bg_image texture: ", bg_image.texture if bg_image else null)
 

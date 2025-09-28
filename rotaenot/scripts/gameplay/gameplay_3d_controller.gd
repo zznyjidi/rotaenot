@@ -195,45 +195,40 @@ func _hit_note(note: Node2D, distance: float):
 	var judgment = ""
 	total_notes += 1
 
-	# Convert distance to time-based windows (frames at 60fps)
-	# Distance of 100 = 1.0 progress difference, with speed of 0.5 = 2 seconds
-	# So distance of 100 = 2 seconds = 120 frames at 60fps
-	# This gives us: 1 frame = 0.833 distance units
+	# Convert distance to milliseconds for precise timing
+	# Using friend's improved timing windows
+	var time_delta_ms = distance * 16.67  # Approx ms per distance unit at 60fps
 
-	# Time windows in frames (at 60fps):
-	# PERFECT: ±3 frames (50ms)
-	# GREAT: ±6 frames (100ms)
-	# GOOD: ±10 frames (167ms)
-	# BAD: ±15 frames (250ms)
+	# Use friend's timing system
+	var timing_result = TimingManager.calculate_judgment(time_delta_ms)
 
-	var frame_distance = 0.833  # Distance units per frame
-
-	if distance < 3 * frame_distance:  # ±3 frames
-		judgment = "PERFECT"
-		score += 1000
-		combo += 1
-		perfect_count += 1
-	elif distance < 6 * frame_distance:  # ±6 frames
-		judgment = "GREAT"
-		score += 800
-		combo += 1
-		great_count += 1
-	elif distance < 10 * frame_distance:  # ±10 frames
-		judgment = "GOOD"
-		score += 500
-		combo += 1
-		good_count += 1
-	elif distance < 15 * frame_distance:  # ±15 frames
-		judgment = "BAD"
-		score += 100
-		combo = 0
-		bad_count += 1
-	else:
-		# Too far - treat as miss
-		judgment = "MISS"
-		combo = 0
-		miss_count += 1
-		life = max(0, life - 3)
+	match timing_result.judgment:
+		TimingManager.Judgment.PERFECT:
+			judgment = "PERFECT"
+			score += 1000
+			combo += 1
+			perfect_count += 1
+		TimingManager.Judgment.GREAT:
+			judgment = "GREAT"
+			score += 800
+			combo += 1
+			great_count += 1
+		TimingManager.Judgment.GOOD:
+			judgment = "GOOD"
+			score += 500
+			combo += 1
+			good_count += 1
+		TimingManager.Judgment.BAD:
+			judgment = "BAD"
+			score += 100
+			combo = 0
+			bad_count += 1
+		_:
+			# Too far - treat as miss
+			judgment = "MISS"
+			combo = 0
+			miss_count += 1
+			life = max(0, life - 3)
 
 	max_combo = max(max_combo, combo)
 

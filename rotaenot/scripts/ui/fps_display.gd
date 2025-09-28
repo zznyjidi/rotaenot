@@ -46,5 +46,5 @@ func _process(_delta):
 		else:
 			fps_label.add_theme_color_override("font_color", Color(1.0, 0.0, 0.0))  # Red
 
-func toggle_visibility(show: bool):
-	visible = show
+func toggle_visibility(should_show: bool):
+	visible = should_show

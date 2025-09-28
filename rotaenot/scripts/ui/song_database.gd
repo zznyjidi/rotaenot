@@ -6,8 +6,8 @@ class_name SongDatabase
 static var songs = [
 	{
 		"id": "demo_chart",
-		"title": "Demo Track",
-		"artist": "Unknown Artist",
+		"title": "Tutorial Track",
+		"artist": "N/A",
 		"bpm": 120,
 		"duration": "2:34",
 		"chart_path": "res://charts/demo_chart.json",
@@ -45,7 +45,7 @@ static var songs = [
 	{
 		"id": "electronic_dream",
 		"title": "Electronic Dream",
-		"artist": "DJ Virtual",
+		"artist": "N/A",
 		"bpm": 140,
 		"duration": "3:12",
 		"chart_path": "res://charts/electronic_dream.json",
@@ -91,7 +91,7 @@ static var songs = [
 	{
 		"id": "template_chart",
 		"title": "Template Example",
-		"artist": "Chart Designer",
+		"artist": "Example",
 		"bpm": 120,
 		"duration": "0:30",
 		"chart_path": "res://charts/template_chart.json",
@@ -143,6 +143,23 @@ static var songs = [
 		"unlock_status": true,
 		"high_scores": {
 			"Hell": 0
+		}
+	},
+	{
+		"id": "friend_tutorial",
+		"title": "Tutorial No.2",
+		"artist": "Marrelia",
+		"bpm": 120,
+		"duration": "2:00",
+		"chart_path": "res://charts/tutorial_friend.chart",  # CSV format chart
+		"music_path": "res://assets/music/sakuracloud - miffy cafe  [NCS Release].mp3",
+		"preview_image": "res://assets/ui/song_covers/tutorial.png",
+		"difficulties": {
+			"Easy": {"level": 1, "notes": 100, "chart_path": "res://charts/tutorial_friend.chart"}
+		},
+		"unlock_status": true,
+		"high_scores": {
+			"Easy": 0
 		}
 	}
 ]
