@@ -1,0 +1,180 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/settings_menu.gd" id="1_settings"]
+[ext_resource type="Texture2D" path="res://assets/ui/menu_backgrounds/Top_menu.png" id="2_top_menu"]
+
+[node name="SettingsMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_settings")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.05, 0.05, 0.1, 1)
+
+[node name="TopMenuBar" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 80.0
+texture = ExtResource("2_top_menu")
+expand_mode = 0
+stretch_mode = 0
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -250.0
+offset_right = 400.0
+offset_bottom = 250.0
+modulate = Color(1, 1, 1, 0.95)
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_minimum_size = Vector2(720, 0)
+theme_override_constants/separation = 25
+
+[node name="Title" type="Label" parent="Panel/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "Settings"
+horizontal_alignment = 1
+
+[node name="KeymapSection" type="VBoxContainer" parent="Panel/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="KeymapLabel" type="Label" parent="Panel/ScrollContainer/VBoxContainer/KeymapSection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Key Mappings"
+
+[node name="GridContainer" type="GridContainer" parent="Panel/ScrollContainer/VBoxContainer/KeymapSection"]
+layout_mode = 2
+columns = 2
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 10
+
+[node name="AudioSection" type="VBoxContainer" parent="Panel/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="AudioLabel" type="Label" parent="Panel/ScrollContainer/VBoxContainer/AudioSection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Audio Settings"
+
+[node name="MasterLabel" type="Label" parent="Panel/ScrollContainer/VBoxContainer/AudioSection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Master Volume"
+
+[node name="MasterVolume" type="HSlider" parent="Panel/ScrollContainer/VBoxContainer/AudioSection"]
+layout_mode = 2
+min_value = 0.0
+max_value = 100.0
+value = 80.0
+
+[node name="MusicLabel" type="Label" parent="Panel/ScrollContainer/VBoxContainer/AudioSection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Music Volume"
+
+[node name="MusicVolume" type="HSlider" parent="Panel/ScrollContainer/VBoxContainer/AudioSection"]
+layout_mode = 2
+min_value = 0.0
+max_value = 100.0
+value = 70.0
+
+[node name="SFXLabel" type="Label" parent="Panel/ScrollContainer/VBoxContainer/AudioSection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "SFX Volume"
+
+[node name="SFXVolume" type="HSlider" parent="Panel/ScrollContainer/VBoxContainer/AudioSection"]
+layout_mode = 2
+min_value = 0.0
+max_value = 100.0
+value = 100.0
+
+[node name="DisplaySection" type="VBoxContainer" parent="Panel/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="DisplayLabel" type="Label" parent="Panel/ScrollContainer/VBoxContainer/DisplaySection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Display Settings"
+
+[node name="FPSContainer" type="HBoxContainer" parent="Panel/ScrollContainer/VBoxContainer/DisplaySection"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="FPSLabel" type="Label" parent="Panel/ScrollContainer/VBoxContainer/DisplaySection/FPSContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Show FPS Counter:"
+custom_minimum_size = Vector2(200, 30)
+
+[node name="FPSToggle" type="CheckBox" parent="Panel/ScrollContainer/VBoxContainer/DisplaySection/FPSContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(30, 30)
+button_pressed = false
+
+[node name="Spacer" type="Control" parent="Panel/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 20)
+
+[node name="ButtonContainer" type="HBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -70.0
+offset_bottom = -20.0
+offset_left = 200.0
+offset_right = -200.0
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="ResetButton" type="Button" parent="Panel/ButtonContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(150, 40)
+theme_override_font_sizes/font_size = 18
+text = "Reset Keys"
+
+[node name="BackButton" type="Button" parent="Panel/ButtonContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(150, 40)
+theme_override_font_sizes/font_size = 18
+text = "Back"
+
+[connection signal="toggled" from="Panel/ScrollContainer/VBoxContainer/DisplaySection/FPSContainer/FPSToggle" to="." method="_on_fps_toggle_toggled"]
+[connection signal="value_changed" from="Panel/ScrollContainer/VBoxContainer/AudioSection/MasterVolume" to="." method="_on_master_volume_changed"]
+[connection signal="value_changed" from="Panel/ScrollContainer/VBoxContainer/AudioSection/MusicVolume" to="." method="_on_music_volume_changed"]
+[connection signal="value_changed" from="Panel/ScrollContainer/VBoxContainer/AudioSection/SFXVolume" to="." method="_on_sfx_volume_changed"]
+[connection signal="pressed" from="Panel/ButtonContainer/ResetButton" to="." method="_on_reset_button_pressed"]
+[connection signal="pressed" from="Panel/ButtonContainer/BackButton" to="." method="_on_back_button_pressed"]

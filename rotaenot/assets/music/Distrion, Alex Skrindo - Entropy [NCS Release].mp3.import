@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bww4btu2jce4v"
+path="res://.godot/imported/Distrion, Alex Skrindo - Entropy [NCS Release].mp3-05313ffabb8eed5af53edcf8660051d8.mp3str"
+
+[deps]
+
+source_file="res://assets/music/Distrion, Alex Skrindo - Entropy [NCS Release].mp3"
+dest_files=["res://.godot/imported/Distrion, Alex Skrindo - Entropy [NCS Release].mp3-05313ffabb8eed5af53edcf8660051d8.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,172 @@
+{
+	"metadata": {
+		"artist": "Tobu",
+		"audio_file": "res://assets/music/Tobu - Faster [NCS Release].mp3",
+		"bpm": 128,
+		"difficulty": "Easy",
+		"duration": "3:13",
+		"title": "Faster"
+	},
+	"notes": [
+		{
+			"time": 3.5,
+			"track": 0,
+			"type": "tap"
+		},
+		{
+			"time": 9.5,
+			"track": 3,
+			"type": "tap"
+		},
+		{
+			"time": 11.0,
+			"track": 0,
+			"type": "tap"
+		},
+		{
+			"time": 15.5,
+			"track": 3,
+			"type": "tap"
+		},
+		{
+			"time": 17.0,
+			"track": 0,
+			"type": "tap"
+		},
+		{
+			"time": 20.0,
+			"track": 3,
+			"type": "tap"
+		},
+		{
+			"time": 33.5,
+			"track": 0,
+			"type": "tap"
+		},
+		{
+			"time": 35.0,
+			"track": 3,
+			"type": "tap"
+		},
+		{
+			"time": 36.5,
+			"track": 0,
+			"type": "tap"
+		},
+		{
+			"time": 41.0,
+			"track": 3,
+			"type": "tap"
+		},
+		{
+			"time": 53.0,
+			"track": 0,
+			"type": "tap"
+		},
+		{
+			"time": 57.5,
+			"track": 3,
+			"type": "tap"
+		},
+		{
+			"time": 60.5,
+			"track": 0,
+			"type": "tap"
+		},
+		{
+			"time": 62.0,
+			"track": 3,
+			"type": "tap"
+		},
+		{
+			"time": 63.5,
+			"track": 0,
+			"type": "tap"
+		},
+		{
+			"time": 71.0,
+			"track": 3,
+			"type": "tap"
+		},
+		{
+			"time": 101.0,
+			"track": 0,
+			"type": "tap"
+		},
+		{
+			"time": 102.5,
+			"track": 3,
+			"type": "tap"
+		},
+		{
+			"time": 105.5,
+			"track": 0,
+			"type": "tap"
+		},
+		{
+			"time": 108.5,
+			"track": 3,
+			"type": "tap"
+		},
+		{
+			"time": 111.5,
+			"track": 0,
+			"type": "tap"
+		},
+		{
+			"time": 126.5,
+			"track": 3,
+			"type": "tap"
+		},
+		{
+			"time": 135.5,
+			"track": 0,
+			"type": "tap"
+		},
+		{
+			"time": 137.0,
+			"track": 3,
+			"type": "tap"
+		},
+		{
+			"time": 143.0,
+			"track": 0,
+			"type": "tap"
+		},
+		{
+			"time": 158.0,
+			"track": 3,
+			"type": "tap"
+		},
+		{
+			"time": 161.0,
+			"track": 0,
+			"type": "tap"
+		},
+		{
+			"time": 167.0,
+			"track": 3,
+			"type": "tap"
+		},
+		{
+			"time": 173.0,
+			"track": 0,
+			"type": "tap"
+		},
+		{
+			"time": 177.5,
+			"track": 3,
+			"type": "tap"
+		},
+		{
+			"time": 179.0,
+			"track": 0,
+			"type": "tap"
+		},
+		{
+			"time": 182.0,
+			"track": 3,
+			"type": "tap"
+		}
+	]
+}
