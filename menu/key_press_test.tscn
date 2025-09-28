@@ -50,3 +50,4 @@ script = ExtResource("1_x558x")
 [node name="JudgementTimer" parent="." instance=ExtResource("2_lnnxu")]
 
 [connection signal="key_status_updated" from="JudgementTimer" to="KeyStatus" method="_on_judgement_timer_key_status_updated"]
+[connection signal="note_update" from="JudgementTimer" to="KeyStatus" method="_on_judgement_timer_note_update"]

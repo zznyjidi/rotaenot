@@ -1,6 +1,7 @@
 extends Node
 
 class Note:
+	var index: int
 	var time: int
 	var track: int
 	var type: int

@@ -5,9 +5,7 @@ var key_track_map: Array[int] = [1, 2, 3, 4, 5, 6]
 var frame_count: int = 0
 
 signal key_status_updated(frame: int, track_status: Array[bool])
-
-func _ready() -> void:
-	reset()
+signal note_update(judgement_type: int, note_index: int, track: int, hit_delta: int)
 
 func reset() -> void:
 	frame_count = 0
@@ -33,3 +31,7 @@ func swap(track1: int, track2: int) -> void:
 	var track1_prev = key_track_map[track1 - 1]
 	key_track_map[track1 - 1] = key_track_map[track2 - 1]
 	key_track_map[track2 - 1] = track1_prev
+
+
+func _on_judgement_note_updated(judgment, note_index, track, hit_delta):
+	note_update.emit(judgment, note_index, track, hit_delta)

@@ -1,6 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://gr2ce1yxm3g5"]
+[gd_scene load_steps=3 format=3 uid="uid://gr2ce1yxm3g5"]
 
 [ext_resource type="Script" uid="uid://bydgfyh5vo45j" path="res://game/chart/timing.gd" id="1_fui2m"]
+[ext_resource type="Script" uid="uid://bmcdmj8f6uofw" path="res://game/chart/judgement.gd" id="2_7lav0"]
 
 [node name="JudgementTimer" type="Node"]
 script = ExtResource("1_fui2m")
+
+[node name="Judgement" type="Node" parent="."]
+script = ExtResource("2_7lav0")
+
+[connection signal="key_status_updated" from="." to="Judgement" method="_on_judgement_timer_key_status_updated"]
+[connection signal="note_updated" from="Judgement" to="." method="_on_judgement_note_updated"]
