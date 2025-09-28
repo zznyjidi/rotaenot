@@ -1,0 +1,158 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/results_screen.gd" id="1_results"]
+
+[node name="ResultsScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_results")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.05, 0.05, 0.1, 1)
+
+[node name="BackgroundGradient" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.1, 0.05, 0.2, 0.2)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="ResultPanel" type="Panel" parent="CenterContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(700, 550)
+modulate = Color(1, 1, 1, 0.95)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/ResultPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = 30.0
+offset_right = -40.0
+offset_bottom = -30.0
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="ResultTitle" type="Label" parent="CenterContainer/ResultPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "STAGE CLEAR!"
+horizontal_alignment = 1
+
+[node name="SongInfo" type="Label" parent="CenterContainer/ResultPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+theme_override_font_sizes/font_size = 20
+text = "Song Title - Artist [Normal]"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="CenterContainer/ResultPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="StatsContainer" type="GridContainer" parent="CenterContainer/ResultPanel/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+columns = 2
+theme_override_constants/h_separation = 40
+theme_override_constants/v_separation = 10
+
+[node name="ScoreLabel" type="Label" parent="CenterContainer/ResultPanel/VBoxContainer/StatsContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Score: 0"
+
+[node name="ComboLabel" type="Label" parent="CenterContainer/ResultPanel/VBoxContainer/StatsContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Max Combo: 0"
+
+[node name="PerfectLabel" type="Label" parent="CenterContainer/ResultPanel/VBoxContainer/StatsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.9, 0.2, 1)
+theme_override_font_sizes/font_size = 18
+text = "Perfect: 0"
+
+[node name="GreatLabel" type="Label" parent="CenterContainer/ResultPanel/VBoxContainer/StatsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 1, 0.2, 1)
+theme_override_font_sizes/font_size = 18
+text = "Great: 0"
+
+[node name="GoodLabel" type="Label" parent="CenterContainer/ResultPanel/VBoxContainer/StatsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.8, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "Good: 0"
+
+[node name="BadLabel" type="Label" parent="CenterContainer/ResultPanel/VBoxContainer/StatsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.5, 0.2, 1)
+theme_override_font_sizes/font_size = 18
+text = "Bad: 0"
+
+[node name="MissLabel" type="Label" parent="CenterContainer/ResultPanel/VBoxContainer/StatsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.2, 0.2, 1)
+theme_override_font_sizes/font_size = 18
+text = "Miss: 0"
+
+[node name="Spacer" type="Control" parent="CenterContainer/ResultPanel/VBoxContainer/StatsContainer"]
+layout_mode = 2
+
+[node name="AccuracyLabel" type="Label" parent="CenterContainer/ResultPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "Accuracy: 0%"
+horizontal_alignment = 1
+
+[node name="RankLabel" type="Label" parent="CenterContainer/ResultPanel/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 48
+text = "S"
+horizontal_alignment = 1
+
+[node name="NewRecordLabel" type="Label" parent="CenterContainer/ResultPanel/VBoxContainer"]
+layout_mode = 2
+visible = false
+theme_override_colors/font_color = Color(1, 0.8, 0.2, 1)
+theme_override_font_sizes/font_size = 24
+text = "NEW RECORD!"
+horizontal_alignment = 1
+
+[node name="HSeparator2" type="HSeparator" parent="CenterContainer/ResultPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="ButtonContainer" type="HBoxContainer" parent="CenterContainer/ResultPanel/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 30
+alignment = 1
+
+[node name="RetryButton" type="Button" parent="CenterContainer/ResultPanel/VBoxContainer/ButtonContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(150, 45)
+theme_override_font_sizes/font_size = 20
+text = "Retry"
+
+[node name="MenuButton" type="Button" parent="CenterContainer/ResultPanel/VBoxContainer/ButtonContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(150, 45)
+theme_override_font_sizes/font_size = 20
+text = "Song Select"
+
+[connection signal="pressed" from="CenterContainer/ResultPanel/VBoxContainer/ButtonContainer/RetryButton" to="." method="_on_retry_button_pressed"]
+[connection signal="pressed" from="CenterContainer/ResultPanel/VBoxContainer/ButtonContainer/MenuButton" to="." method="_on_menu_button_pressed"]

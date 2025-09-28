@@ -2,6 +2,7 @@ extends Node2D
 
 var note_scene = preload("res://scenes/notes/note_3d.tscn")
 var is_spawning: bool = false
+var chart_finished: bool = false
 
 # Chart system
 var chart_loader: ChartLoader
@@ -42,6 +43,9 @@ func start_spawning():
 func stop_spawning():
 	is_spawning = false
 
+func is_finished() -> bool:
+	return chart_finished
+
 func load_chart(chart_path: String) -> bool:
 	# Load a specific chart file
 	song_time = 0.0
@@ -59,6 +63,7 @@ func load_chart(chart_path: String) -> bool:
 func reset():
 	# Reset the spawner for replay
 	song_time = 0.0
+	chart_finished = false
 	if chart_loader:
 		chart_loader.reset()
 	pattern_index = 0
@@ -86,6 +91,11 @@ func _process_chart():
 			_spawn_note_from_data(note_data)
 		else:
 			break
+
+	# Check if chart is finished
+	if not chart_loader.has_more_notes() and not chart_finished:
+		chart_finished = true
+		print("All notes spawned, waiting for last notes to complete")
 
 func _process_fallback(delta: float):
 	# Use the old timer-based system for fallback

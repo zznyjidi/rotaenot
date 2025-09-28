@@ -1,7 +1,11 @@
 extends Control
 
 func _ready():
-	$VBoxContainer/PlayButton.grab_focus()
+	# Redirect to clean main menu using deferred call to avoid node busy error
+	call_deferred("_change_to_new_menu")
+
+func _change_to_new_menu():
+	get_tree().change_scene_to_file("res://scenes/main_menu/diamond_menu.tscn")
 
 func _on_play_button_pressed():
 	print("Opening song selection...")

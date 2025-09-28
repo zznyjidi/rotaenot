@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/ui/song_select.gd" id="1_song_select"]
 [ext_resource type="Texture2D" path="res://assets/textures/ui/UnSelect_Menu.png" id="2_unselect_bg"]
 [ext_resource type="Texture2D" path="res://assets/textures/ui/Select_Menu.png" id="3_select_bg"]
-[ext_resource type="Texture2D" path="res://assets/ui/menu_backgrounds/Top_Menu.png" id="4_top_menu"]
+[ext_resource type="Texture2D" path="res://assets/ui/menu_backgrounds/Top_menu.png" id="4_top_menu"]
 
 [node name="SongSelect" type="Control"]
 layout_mode = 3

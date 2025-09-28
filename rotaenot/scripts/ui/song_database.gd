@@ -55,14 +55,16 @@ static var songs = [
 			"Easy": {"level": 3, "notes": 200},
 			"Normal": {"level": 6, "notes": 380},
 			"Hard": {"level": 9, "notes": 620},
-			"Expert": {"level": 11, "notes": 980}
+			"Expert": {"level": 11, "notes": 980},
+			"Hell": {"level": 15, "notes": 320, "chart_path": "res://charts/electronic_dream_hell.json"}
 		},
 		"unlock_status": true,
 		"high_scores": {
 			"Easy": 0,
 			"Normal": 0,
 			"Hard": 0,
-			"Expert": 0
+			"Expert": 0,
+			"Hell": 0
 		}
 	},
 	{

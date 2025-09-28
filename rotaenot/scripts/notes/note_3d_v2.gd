@@ -38,6 +38,9 @@ var note_textures = [
 func _ready():
 	set_meta("target_pad", target_pad)
 
+	# Set z-index so notes appear below the center mask
+	z_index = 0  # Notes at base level
+
 	# Create visual using Polygon2D with texture
 	var visual = $Visual if has_node("Visual") else null
 	if not visual:

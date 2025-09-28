@@ -142,6 +142,8 @@ func _get_difficulty_color(difficulty: String) -> Color:
 			return Color(1.0, 0.5, 0.3)
 		"Expert":
 			return Color(1.0, 0.2, 0.5)
+		"Hell":
+			return Color(0.8, 0.0, 0.0)  # Dark red
 		_:
 			return Color.WHITE
 
@@ -297,8 +299,15 @@ func _start_game():
 		print("This song is locked!")
 		return
 
+	# Check if this difficulty has a specific chart path
+	var song_copy = song.duplicate(true)
+	if song.difficulties.has(selected_difficulty):
+		var diff_data = song.difficulties[selected_difficulty]
+		if diff_data.has("chart_path"):
+			song_copy.chart_path = diff_data.chart_path
+
 	# Store selected song data
-	GameData.selected_song = song
+	GameData.selected_song = song_copy
 	GameData.selected_difficulty = selected_difficulty
 
 	# Fade out before transitioning

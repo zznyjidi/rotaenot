@@ -25,7 +25,10 @@ func _ready():
 	_create_pads()  # Create pads first since track lines need them
 	_create_track_fills()  # Create track fills
 	_create_track_lines()  # Create track lines after pads
+	# Create initial mask (will be updated if background loads)
 	_create_center_mask()
+	# Add music visualizer ring
+	_create_audio_visualizer()
 
 func _create_playfield():
 	# Create VERTICAL ellipse boundary - tall and thin
@@ -270,25 +273,360 @@ func get_track_line_points(track_index: int) -> PackedVector2Array:
 	return PackedVector2Array()
 
 func _create_center_mask():
-	# Create an olive-shaped mask in the center to hide note spawn
+	# Create a simple solid mask that blocks the center portions
+	# This will be updated later if a background image loads
+
+	# Get background info to match color
+	var gameplay_scene = get_parent().get_parent() if get_parent() else null
+	var bg_layer = gameplay_scene.get_node_or_null("BackgroundLayer") if gameplay_scene else null
+	var bg_image = bg_layer.get_node_or_null("BackgroundImage") if bg_layer else null
+	var blur_overlay = bg_layer.get_node_or_null("BlurOverlay") if bg_layer else null
+
+	print("Creating initial center mask, bg_image texture: ", bg_image.texture if bg_image else null)
+
+	# Create the center mask polygon
 	var mask = Polygon2D.new()
 	mask.name = "CenterMask"
-	mask.color = Color(0, 0, 0, 1.0)  # Black background color
-	mask.z_index = 3  # Above track fills and lines, but below HUD
+	mask.z_index = 5  # High z-index to cover track lines and notes
 
-	# Create an olive shape with same ratio as outer ellipse
+	# Create a circular shape to match the visualizer ring
 	var points = PackedVector2Array()
-	var mask_width = 144.0  # Width of the mask olive (scaled by 1.2: 120 * 1.2)
-	var mask_height = 200.0  # Height maintains 1:2 ratio (approx 120 * 1.67)
+	var mask_radius = 112.0  # 70% of original size (160 * 0.7)
 	var segments = 32
 
 	for i in range(segments):
 		var angle = (i / float(segments)) * TAU
-		var x = cos(angle) * mask_width
-		var y = sin(angle) * mask_height
+		var x = cos(angle) * mask_radius
+		var y = sin(angle) * mask_radius
 		points.append(Vector2(x, y))
 
 	mask.polygon = points
 
-	# Add it as last child so it renders on top of notes but below UI
-	add_child(mask)
+	# Set the mask color to blend with background
+	if bg_image and bg_image.texture:
+		# If there's a background image, create a sprite that shows it
+		var mask_sprite = Sprite2D.new()
+		mask_sprite.name = "CenterMaskSprite"
+		mask_sprite.texture = bg_image.texture
+		mask_sprite.centered = true
+		mask_sprite.z_index = 5  # Above tracks and notes
+
+		# Scale to match the background size
+		var tex_size = bg_image.texture.get_size()
+		var scale_x = 1280.0 / tex_size.x
+		var scale_y = 720.0 / tex_size.y
+		mask_sprite.scale = Vector2(scale_x, scale_y)
+
+		# Apply a clip mask using a shader that only shows ellipse area
+		var clip_shader = Shader.new()
+		clip_shader.code = """
+shader_type canvas_item;
+
+uniform float circle_radius = 112.0;
+uniform float blur_amount : hint_range(0.0, 10.0) = 2.0;
+uniform float darken : hint_range(0.0, 1.0) = 0.3;
+
+void fragment() {
+	// Apply a stronger gaussian blur
+	vec2 pixel_size = 1.0 / vec2(textureSize(TEXTURE, 0));
+	vec4 color = vec4(0.0);
+	float total = 0.0;
+
+	// Larger blur kernel for more pronounced effect
+	for(float x = -4.0; x <= 4.0; x += 1.0) {
+		for(float y = -4.0; y <= 4.0; y += 1.0) {
+			float d = length(vec2(x, y));
+			float weight = exp(-d * d / 8.0); // Gaussian weight
+			vec2 offset = vec2(x, y) * pixel_size * blur_amount;
+			color += texture(TEXTURE, UV + offset) * weight;
+			total += weight;
+		}
+	}
+
+	color /= total;
+	color.rgb *= (1.0 - darken);  // Apply darkening
+
+	// Calculate position relative to sprite center (in pixels)
+	vec2 tex_size = vec2(1280.0, 720.0);
+	vec2 world_pos = (UV - 0.5) * tex_size;
+
+	// Check if inside circle
+	float dist = length(world_pos);
+
+	if (dist <= circle_radius) {
+		// Inside circle - show the blurred texture with soft edge
+		float edge_fade = smoothstep(circle_radius * 0.95, circle_radius, dist);
+		COLOR = vec4(color.rgb, 1.0 - edge_fade);
+	} else {
+		// Outside circle - transparent
+		COLOR = vec4(0.0);
+	}
+}
+"""
+		var clip_material = ShaderMaterial.new()
+		clip_material.shader = clip_shader
+		clip_material.set_shader_parameter("circle_radius", 112.0)
+		clip_material.set_shader_parameter("blur_amount", 3.0)  # Increased blur to match background
+		clip_material.set_shader_parameter("darken", 0.6)  # Match the blur overlay's 0.6 alpha darkening
+		mask_sprite.material = clip_material
+
+		add_child(mask_sprite)
+	else:
+		# No background image, use solid color
+		print("No background texture found, using solid color mask")
+		if blur_overlay and blur_overlay.visible:
+			mask.color = blur_overlay.color
+		else:
+			mask.color = Color(0.02, 0.02, 0.05, 1.0)
+		add_child(mask)
+
+	# Border removed - no longer needed
+
+	set_meta("center_mask", get_node_or_null("CenterMaskSprite") if (bg_image and bg_image.texture) else mask)
+
+func _create_combo_display():
+	# Create a label to show combo number in the center
+	var combo_label = Label.new()
+	combo_label.name = "ComboDisplay"
+	combo_label.text = "0"
+	combo_label.add_theme_font_size_override("font_size", 50)  # Large font (70% of original)
+	combo_label.z_index = 10  # Above everything
+
+	# Center the label
+	combo_label.set_anchors_preset(Control.PRESET_CENTER)
+	combo_label.position = Vector2(-35, -28)  # Adjust to center the text (70% of original)
+	combo_label.size = Vector2(70, 56)  # 70% of original size
+
+	# Style the text
+	combo_label.add_theme_color_override("font_color", Color(1.0, 1.0, 1.0, 0.9))
+	combo_label.add_theme_color_override("font_shadow_color", Color(0.0, 0.0, 0.0, 0.8))
+	combo_label.add_theme_constant_override("shadow_offset_x", 2)
+	combo_label.add_theme_constant_override("shadow_offset_y", 2)
+	combo_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	combo_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+
+	add_child(combo_label)
+	set_meta("combo_display", combo_label)
+
+func update_combo_display(combo: int):
+	# Update the combo number in the center
+	var combo_label = get_node_or_null("ComboDisplay")
+	if combo_label:
+		combo_label.text = str(combo)
+
+		# Animate on combo change
+		if combo > 0:
+			var tween = create_tween()
+			tween.set_trans(Tween.TRANS_ELASTIC)
+			tween.set_ease(Tween.EASE_OUT)
+			# Pulse effect
+			tween.tween_property(combo_label, "scale", Vector2(1.2, 1.2), 0.1)
+			tween.tween_property(combo_label, "scale", Vector2(1.0, 1.0), 0.2)
+
+			# Color change based on combo level
+			if combo >= 100:
+				combo_label.add_theme_color_override("font_color", Color(1.0, 0.8, 0.2, 1.0))  # Gold
+			elif combo >= 50:
+				combo_label.add_theme_color_override("font_color", Color(0.8, 0.4, 1.0, 1.0))  # Purple
+			elif combo >= 20:
+				combo_label.add_theme_color_override("font_color", Color(0.4, 0.8, 1.0, 1.0))  # Cyan
+			else:
+				combo_label.add_theme_color_override("font_color", Color(1.0, 1.0, 1.0, 0.9))  # White
+
+func _create_audio_visualizer():
+	# Create the audio visualizer ring around the center mask
+	var visualizer = Node2D.new()
+	visualizer.name = "AudioVisualizerRing"
+	visualizer.script = load("res://scripts/gameplay/audio_visualizer_ring.gd")
+	visualizer.z_index = 8  # Above everything else for visibility
+
+	# Configure visualizer parameters
+	visualizer.set("radius_base", 112.0)  # Match the circle mask (70% of original)
+	visualizer.set("radius_response", 35.0)  # How far bars can extend (70% of original)
+	visualizer.set("bar_count", 48)  # Number of frequency bars
+	visualizer.set("bar_width", 2.5)
+	visualizer.set("smoothing", 0.25)  # Smooth animation
+
+	add_child(visualizer)
+	set_meta("audio_visualizer", visualizer)
+
+	# Add combo number display in the center
+	_create_combo_display()
+
+func update_center_mask_with_texture(texture: Texture2D):
+	# Called when background is loaded, update the mask to show the background
+	print("Updating center mask with texture: ", texture)
+
+	# Remove existing mask
+	var old_mask = get_node_or_null("CenterMask")
+	if old_mask:
+		old_mask.queue_free()
+	var old_sprite = get_node_or_null("CenterMaskSprite")
+	if old_sprite:
+		old_sprite.queue_free()
+
+	if texture:
+		# Create a sprite that shows the background
+		var mask_sprite = Sprite2D.new()
+		mask_sprite.name = "CenterMaskSprite"
+		mask_sprite.texture = texture
+		mask_sprite.centered = true
+		mask_sprite.z_index = 5  # Above tracks and notes
+
+		# Scale to match the background size
+		var tex_size = texture.get_size()
+		var scale_x = 1280.0 / tex_size.x
+		var scale_y = 720.0 / tex_size.y
+		mask_sprite.scale = Vector2(scale_x, scale_y)
+
+		# Apply a clip mask using a shader that only shows ellipse area
+		var clip_shader = Shader.new()
+		clip_shader.code = """
+shader_type canvas_item;
+
+uniform float circle_radius = 112.0;
+uniform float blur_amount : hint_range(0.0, 10.0) = 2.0;
+uniform float darken : hint_range(0.0, 1.0) = 0.3;
+
+void fragment() {
+	// Apply a stronger gaussian blur
+	vec2 pixel_size = 1.0 / vec2(textureSize(TEXTURE, 0));
+	vec4 color = vec4(0.0);
+	float total = 0.0;
+
+	// Larger blur kernel for more pronounced effect
+	for(float x = -4.0; x <= 4.0; x += 1.0) {
+		for(float y = -4.0; y <= 4.0; y += 1.0) {
+			float d = length(vec2(x, y));
+			float weight = exp(-d * d / 8.0); // Gaussian weight
+			vec2 offset = vec2(x, y) * pixel_size * blur_amount;
+			color += texture(TEXTURE, UV + offset) * weight;
+			total += weight;
+		}
+	}
+
+	color /= total;
+	color.rgb *= (1.0 - darken);  // Apply darkening
+
+	// Calculate position relative to sprite center (in pixels)
+	vec2 tex_size = vec2(1280.0, 720.0);
+	vec2 world_pos = (UV - 0.5) * tex_size;
+
+	// Check if inside circle
+	float dist = length(world_pos);
+
+	if (dist <= circle_radius) {
+		// Inside circle - show the blurred texture with soft edge
+		float edge_fade = smoothstep(circle_radius * 0.95, circle_radius, dist);
+		COLOR = vec4(color.rgb, 1.0 - edge_fade);
+	} else {
+		// Outside circle - transparent
+		COLOR = vec4(0.0);
+	}
+}
+"""
+		var clip_material = ShaderMaterial.new()
+		clip_material.shader = clip_shader
+		clip_material.set_shader_parameter("circle_radius", 112.0)
+		clip_material.set_shader_parameter("blur_amount", 3.0)  # Increased blur to match background
+		clip_material.set_shader_parameter("darken", 0.6)  # Match the blur overlay's 0.6 alpha darkening
+		mask_sprite.material = clip_material
+
+		add_child(mask_sprite)
+		set_meta("center_mask", mask_sprite)
+		print("Successfully created mask with background texture")
+	else:
+		print("No texture provided, keeping solid mask")
+
+func update_center_mask():
+	# Called when background is loaded, update the mask to show the background
+	print("Updating center mask with loaded background")
+
+	# Remove existing mask
+	var old_mask = get_node_or_null("CenterMask")
+	if old_mask:
+		old_mask.queue_free()
+	var old_sprite = get_node_or_null("CenterMaskSprite")
+	if old_sprite:
+		old_sprite.queue_free()
+
+	# Get background info
+	var gameplay_scene = get_parent().get_parent() if get_parent() else null
+	var bg_layer = gameplay_scene.get_node_or_null("BackgroundLayer") if gameplay_scene else null
+	var bg_image = bg_layer.get_node_or_null("BackgroundImage") if bg_layer else null
+	var blur_overlay = bg_layer.get_node_or_null("BlurOverlay") if bg_layer else null
+
+	print("Update mask - bg_image texture: ", bg_image.texture if bg_image else null)
+
+	if bg_image and bg_image.texture:
+		# Create a sprite that shows the background
+		var mask_sprite = Sprite2D.new()
+		mask_sprite.name = "CenterMaskSprite"
+		mask_sprite.texture = bg_image.texture
+		mask_sprite.centered = true
+		mask_sprite.z_index = 5  # Above tracks and notes
+
+		# Scale to match the background size
+		var tex_size = bg_image.texture.get_size()
+		var scale_x = 1280.0 / tex_size.x
+		var scale_y = 720.0 / tex_size.y
+		mask_sprite.scale = Vector2(scale_x, scale_y)
+
+		# Apply a clip mask using a shader that only shows ellipse area
+		var clip_shader = Shader.new()
+		clip_shader.code = """
+shader_type canvas_item;
+
+uniform float circle_radius = 112.0;
+uniform float blur_amount : hint_range(0.0, 10.0) = 2.0;
+uniform float darken : hint_range(0.0, 1.0) = 0.3;
+
+void fragment() {
+	// Apply a stronger gaussian blur
+	vec2 pixel_size = 1.0 / vec2(textureSize(TEXTURE, 0));
+	vec4 color = vec4(0.0);
+	float total = 0.0;
+
+	// Larger blur kernel for more pronounced effect
+	for(float x = -4.0; x <= 4.0; x += 1.0) {
+		for(float y = -4.0; y <= 4.0; y += 1.0) {
+			float d = length(vec2(x, y));
+			float weight = exp(-d * d / 8.0); // Gaussian weight
+			vec2 offset = vec2(x, y) * pixel_size * blur_amount;
+			color += texture(TEXTURE, UV + offset) * weight;
+			total += weight;
+		}
+	}
+
+	color /= total;
+	color.rgb *= (1.0 - darken);  // Apply darkening
+
+	// Calculate position relative to sprite center (in pixels)
+	vec2 tex_size = vec2(1280.0, 720.0);
+	vec2 world_pos = (UV - 0.5) * tex_size;
+
+	// Check if inside circle
+	float dist = length(world_pos);
+
+	if (dist <= circle_radius) {
+		// Inside circle - show the blurred texture with soft edge
+		float edge_fade = smoothstep(circle_radius * 0.95, circle_radius, dist);
+		COLOR = vec4(color.rgb, 1.0 - edge_fade);
+	} else {
+		// Outside circle - transparent
+		COLOR = vec4(0.0);
+	}
+}
+"""
+		var clip_material = ShaderMaterial.new()
+		clip_material.shader = clip_shader
+		clip_material.set_shader_parameter("circle_radius", 112.0)
+		clip_material.set_shader_parameter("blur_amount", 3.0)  # Increased blur to match background
+		clip_material.set_shader_parameter("darken", 0.6)  # Match the blur overlay's 0.6 alpha darkening
+		mask_sprite.material = clip_material
+
+		add_child(mask_sprite)
+		set_meta("center_mask", mask_sprite)
+		print("Successfully created mask with background texture")
+	else:
+		print("No background texture available, keeping solid mask")
