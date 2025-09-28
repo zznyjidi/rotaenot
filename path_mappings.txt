@@ -1,0 +1,167 @@
+res://.claude/settings.local.json -> res://.claude_settings.local.json
+res://CHART_FORMAT_SPEC.md -> res://CHART_FORMAT_SPEC.md
+res://DESIGN_REQUIREMENTS.md -> res://DESIGN_REQUIREMENTS.md
+res://DEVELOPMENT.md -> res://DEVELOPMENT.md
+res://HOW_TO_RUN.md -> res://HOW_TO_RUN.md
+res://LEVEL_CREATION_GUIDE.md -> res://LEVEL_CREATION_GUIDE.md
+res://PROJECT_STRUCTURE.md -> res://PROJECT_STRUCTURE.md
+res://assets/README.md -> res://assets_README.md
+res://assets/fonts/font01.png -> res://assets_fonts_font01.png
+res://assets/fonts/font01.png.import -> res://assets_fonts_font01.png.import
+res://assets/fonts/font02.png -> res://assets_fonts_font02.png
+res://assets/fonts/font02.png.import -> res://assets_fonts_font02.png.import
+res://assets/fonts/font03.png -> res://assets_fonts_font03.png
+res://assets/fonts/font03.png.import -> res://assets_fonts_font03.png.import
+res://assets/fonts/font04.png -> res://assets_fonts_font04.png
+res://assets/fonts/font04.png.import -> res://assets_fonts_font04.png.import
+res://assets/fonts/font_main.png -> res://assets_fonts_font_main.png
+res://assets/fonts/font_main.png.import -> res://assets_fonts_font_main.png.import
+res://assets/music/Aisake, Dosi - Cruising [NCS Release].mp3 -> res://assets_music_Aisake, Dosi - Cruising [NCS Release].mp3
+res://assets/music/Aisake, Dosi - Cruising [NCS Release].mp3.import -> res://assets_music_Aisake, Dosi - Cruising [NCS Release].mp3.import
+res://assets/music/Different Heaven - Nekozilla [NCS Release].mp3 -> res://assets_music_Different Heaven - Nekozilla [NCS Release].mp3
+res://assets/music/Different Heaven - Nekozilla [NCS Release].mp3.import -> res://assets_music_Different Heaven - Nekozilla [NCS Release].mp3.import
+res://assets/music/Distrion, Alex Skrindo - Entropy [NCS Release].mp3 -> res://assets_music_Distrion, Alex Skrindo - Entropy [NCS Release].mp3
+res://assets/music/Distrion, Alex Skrindo - Entropy [NCS Release].mp3.import -> res://assets_music_Distrion, Alex Skrindo - Entropy [NCS Release].mp3.import
+res://assets/music/Electro-Light, Kovan - Skyline Pt. II [NCS Release].mp3 -> res://assets_music_Electro-Light, Kovan - Skyline Pt. II [NCS Release].mp3
+res://assets/music/Electro-Light, Kovan - Skyline Pt. II [NCS Release].mp3.import -> res://assets_music_Electro-Light, Kovan - Skyline Pt. II [NCS Release].mp3.import
+res://assets/music/Joyful, Фрози, Zachz Winner - Boogie [NCS Release].mp3 -> res://assets_music_Joyful, Фрози, Zachz Winner - Boogie [NCS Release].mp3
+res://assets/music/Joyful, Фрози, Zachz Winner - Boogie [NCS Release].mp3.import -> res://assets_music_Joyful, Фрози, Zachz Winner - Boogie [NCS Release].mp3.import
+res://assets/music/Kovan, Electro-Light - Skyline [NCS Release].mp3 -> res://assets_music_Kovan, Electro-Light - Skyline [NCS Release].mp3
+res://assets/music/Kovan, Electro-Light - Skyline [NCS Release].mp3.import -> res://assets_music_Kovan, Electro-Light - Skyline [NCS Release].mp3.import
+res://assets/music/No Hero, Tatsunoshin - All Or Nothing [NCS Release].mp3 -> res://assets_music_No Hero, Tatsunoshin - All Or Nothing [NCS Release].mp3
+res://assets/music/No Hero, Tatsunoshin - All Or Nothing [NCS Release].mp3.import -> res://assets_music_No Hero, Tatsunoshin - All Or Nothing [NCS Release].mp3.import
+res://assets/music/RINZO, MAHIRU - デイドリーム (Daydream) [NCS Release].mp3 -> res://assets_music_RINZO, MAHIRU - デイドリーム (Daydream) [NCS Release].mp3
+res://assets/music/RINZO, MAHIRU - デイドリーム (Daydream) [NCS Release].mp3.import -> res://assets_music_RINZO, MAHIRU - デイドリーム (Daydream) [NCS Release].mp3.import
+res://assets/music/Tobu - Faster [NCS Release].mp3 -> res://assets_music_Tobu - Faster [NCS Release].mp3
+res://assets/music/Tobu - Faster [NCS Release].mp3.import -> res://assets_music_Tobu - Faster [NCS Release].mp3.import
+res://assets/music/Tobu - Funk It [NCS Release].mp3 -> res://assets_music_Tobu - Funk It [NCS Release].mp3
+res://assets/music/Tobu - Funk It [NCS Release].mp3.import -> res://assets_music_Tobu - Funk It [NCS Release].mp3.import
+res://assets/music/Zachz Winner - blu [NCS Release].mp3 -> res://assets_music_Zachz Winner - blu [NCS Release].mp3
+res://assets/music/Zachz Winner - blu [NCS Release].mp3.import -> res://assets_music_Zachz Winner - blu [NCS Release].mp3.import
+res://assets/music/sakuracloud - miffy cafe  [NCS Release].mp3 -> res://assets_music_sakuracloud - miffy cafe  [NCS Release].mp3
+res://assets/music/sakuracloud - miffy cafe  [NCS Release].mp3.import -> res://assets_music_sakuracloud - miffy cafe  [NCS Release].mp3.import
+res://assets/music/sakuracloud, 99god - miffy cafe pt. 2 [NCS Release].mp3 -> res://assets_music_sakuracloud, 99god - miffy cafe pt. 2 [NCS Release].mp3
+res://assets/music/sakuracloud, 99god - miffy cafe pt. 2 [NCS Release].mp3.import -> res://assets_music_sakuracloud, 99god - miffy cafe pt. 2 [NCS Release].mp3.import
+res://assets/textures/notes/Node_1.png -> res://assets_textures_notes_Node_1.png
+res://assets/textures/notes/Node_1.png.import -> res://assets_textures_notes_Node_1.png.import
+res://assets/textures/notes/Node_1.xcf -> res://assets_textures_notes_Node_1.xcf
+res://assets/textures/notes/Node_2.png -> res://assets_textures_notes_Node_2.png
+res://assets/textures/notes/Node_2.png.import -> res://assets_textures_notes_Node_2.png.import
+res://assets/textures/notes/Node_2.xcf -> res://assets_textures_notes_Node_2.xcf
+res://assets/textures/notes/Node_3.png -> res://assets_textures_notes_Node_3.png
+res://assets/textures/notes/Node_3.png.import -> res://assets_textures_notes_Node_3.png.import
+res://assets/textures/ui/Select_Menu.png -> res://assets_textures_ui_Select_Menu.png
+res://assets/textures/ui/Select_Menu.png.import -> res://assets_textures_ui_Select_Menu.png.import
+res://assets/textures/ui/UnSelect_Menu.png -> res://assets_textures_ui_UnSelect_Menu.png
+res://assets/textures/ui/UnSelect_Menu.png.import -> res://assets_textures_ui_UnSelect_Menu.png.import
+res://assets/textures/ui/UnSelect_Menu1.png -> res://assets_textures_ui_UnSelect_Menu1.png
+res://assets/textures/ui/UnSelect_Menu1.png.import -> res://assets_textures_ui_UnSelect_Menu1.png.import
+res://assets/textures/ui/UnSelect_Menu2.png -> res://assets_textures_ui_UnSelect_Menu2.png
+res://assets/textures/ui/UnSelect_Menu2.png.import -> res://assets_textures_ui_UnSelect_Menu2.png.import
+res://assets/ui/ASSET_GUIDE.md -> res://assets_ui_ASSET_GUIDE.md
+res://assets/ui/backgrounds/file_0052.png -> res://assets_ui_backgrounds_file_0052.png
+res://assets/ui/backgrounds/file_0052.png.import -> res://assets_ui_backgrounds_file_0052.png.import
+res://assets/ui/backgrounds/pop-6.mp3 -> res://assets_ui_backgrounds_pop-6.mp3
+res://assets/ui/backgrounds/pop-6.mp3.import -> res://assets_ui_backgrounds_pop-6.mp3.import
+res://assets/ui/menu_backgrounds/Cover_background.png -> res://assets_ui_menu_backgrounds_Cover_background.png
+res://assets/ui/menu_backgrounds/Cover_background.png.import -> res://assets_ui_menu_backgrounds_Cover_background.png.import
+res://assets/ui/menu_backgrounds/NoImage.png -> res://assets_ui_menu_backgrounds_NoImage.png
+res://assets/ui/menu_backgrounds/NoImage.png.import -> res://assets_ui_menu_backgrounds_NoImage.png.import
+res://assets/ui/song_covers/demo.png -> res://assets_ui_song_covers_demo.png
+res://assets/ui/song_covers/demo.png.import -> res://assets_ui_song_covers_demo.png.import
+res://assets/ui/song_covers/electronic.png -> res://assets_ui_song_covers_electronic.png
+res://assets/ui/song_covers/electronic.png.import -> res://assets_ui_song_covers_electronic.png.import
+res://assets/ui/song_covers/sakura.png -> res://assets_ui_song_covers_sakura.png
+res://assets/ui/song_covers/sakura.png.import -> res://assets_ui_song_covers_sakura.png.import
+res://assets/ui/song_covers/torii-shrine-gate-scenery-sunset-horizon-uhdpaper.com-4K-132.jpg -> res://assets_ui_song_covers_torii-shrine-gate-scenery-sunset-horizon-uhdpaper.com-4K-132.jpg
+res://assets/ui/song_covers/torii-shrine-gate-scenery-sunset-horizon-uhdpaper.com-4K-132.jpg.import -> res://assets_ui_song_covers_torii-shrine-gate-scenery-sunset-horizon-uhdpaper.com-4K-132.jpg.import
+res://assets/ui/song_covers/tutorial.png -> res://assets_ui_song_covers_tutorial.png
+res://assets/ui/song_covers/tutorial.png.import -> res://assets_ui_song_covers_tutorial.png.import
+res://charts/demo_chart.json -> res://charts_demo_chart.json
+res://charts/electronic_dream_hell.json -> res://charts_electronic_dream_hell.json
+res://charts/skyline_hell_generated.json -> res://charts_skyline_hell_generated.json
+res://charts/tobu_faster_easy.json -> res://charts_tobu_faster_easy.json
+res://charts/tobu_faster_expert.json -> res://charts_tobu_faster_expert.json
+res://charts/tobu_faster_hard.json -> res://charts_tobu_faster_hard.json
+res://charts/tobu_faster_normal.json -> res://charts_tobu_faster_normal.json
+res://charts/tutorial_chart.json -> res://charts_tutorial_chart.json
+res://charts/tutorial_friend.chart -> res://charts_tutorial_friend.chart
+res://export_presets.cfg -> res://export_presets.cfg
+res://icon.svg -> res://icon.svg
+res://icon.svg.import -> res://icon.svg.import
+res://project.godot -> res://project.godot
+res://python_backend/__init__.py -> res://python_backend___init__.py
+res://python_backend/chart_parser.py -> res://python_backend_chart_parser.py
+res://python_backend/gyro_processor.py -> res://python_backend_gyro_processor.py
+res://python_backend/requirements.txt -> res://python_backend_requirements.txt
+res://python_backend/score_system.py -> res://python_backend_score_system.py
+res://scenes/gameplay/gameplay_3d.tscn -> res://scenes_gameplay_gameplay_3d.tscn
+res://scenes/main_menu/diamond_menu.tscn -> res://scenes_main_menu_diamond_menu.tscn
+res://scenes/notes/note_3d.tscn -> res://scenes_notes_note_3d.tscn
+res://scenes/tools/chart_generator.tscn -> res://scenes_tools_chart_generator.tscn
+res://scenes/tools/chart_generator_test.tscn -> res://scenes_tools_chart_generator_test.tscn
+res://scenes/ui/fps_display.tscn -> res://scenes_ui_fps_display.tscn
+res://scenes/ui/loading_transition.tscn -> res://scenes_ui_loading_transition.tscn
+res://scenes/ui/results_screen.tscn -> res://scenes_ui_results_screen.tscn
+res://scenes/ui/settings_menu.tscn -> res://scenes_ui_settings_menu.tscn
+res://scenes/ui/song_select.tscn -> res://scenes_ui_song_select.tscn
+res://scripts/core/game_data.gd -> res://scripts_core_game_data.gd
+res://scripts/core/game_data.gd.uid -> res://scripts_core_game_data.gd.uid
+res://scripts/core/settings_manager.gd -> res://scripts_core_settings_manager.gd
+res://scripts/core/settings_manager.gd.uid -> res://scripts_core_settings_manager.gd.uid
+res://scripts/core/timing_manager.gd -> res://scripts_core_timing_manager.gd
+res://scripts/core/timing_manager.gd.uid -> res://scripts_core_timing_manager.gd.uid
+res://scripts/core/universal_chart_loader.gd -> res://scripts_core_universal_chart_loader.gd
+res://scripts/core/universal_chart_loader.gd.uid -> res://scripts_core_universal_chart_loader.gd.uid
+res://scripts/gameplay/audio_visualizer_ring.gd -> res://scripts_gameplay_audio_visualizer_ring.gd
+res://scripts/gameplay/audio_visualizer_ring.gd.uid -> res://scripts_gameplay_audio_visualizer_ring.gd.uid
+res://scripts/gameplay/center_mask.gd -> res://scripts_gameplay_center_mask.gd
+res://scripts/gameplay/center_mask.gd.uid -> res://scripts_gameplay_center_mask.gd.uid
+res://scripts/gameplay/chart_loader.gd -> res://scripts_gameplay_chart_loader.gd
+res://scripts/gameplay/chart_loader.gd.uid -> res://scripts_gameplay_chart_loader.gd.uid
+res://scripts/gameplay/gameplay_3d_controller.gd -> res://scripts_gameplay_gameplay_3d_controller.gd
+res://scripts/gameplay/gameplay_3d_controller.gd.uid -> res://scripts_gameplay_gameplay_3d_controller.gd.uid
+res://scripts/gameplay/note_spawner_3d.gd -> res://scripts_gameplay_note_spawner_3d.gd
+res://scripts/gameplay/note_spawner_3d.gd.uid -> res://scripts_gameplay_note_spawner_3d.gd.uid
+res://scripts/gameplay/playfield_3d.gd -> res://scripts_gameplay_playfield_3d.gd
+res://scripts/gameplay/playfield_3d.gd.uid -> res://scripts_gameplay_playfield_3d.gd.uid
+res://scripts/notes/note_3d.gd -> res://scripts_notes_note_3d.gd
+res://scripts/notes/note_3d.gd.uid -> res://scripts_notes_note_3d.gd.uid
+res://scripts/notes/note_3d_v2.gd -> res://scripts_notes_note_3d_v2.gd
+res://scripts/notes/note_3d_v2.gd.uid -> res://scripts_notes_note_3d_v2.gd.uid
+res://scripts/tools/audio_analyzer.gd -> res://scripts_tools_audio_analyzer.gd
+res://scripts/tools/audio_analyzer.gd.uid -> res://scripts_tools_audio_analyzer.gd.uid
+res://scripts/tools/chart_format_converter.gd -> res://scripts_tools_chart_format_converter.gd
+res://scripts/tools/chart_format_converter.gd.uid -> res://scripts_tools_chart_format_converter.gd.uid
+res://scripts/tools/chart_generator_tool.gd -> res://scripts_tools_chart_generator_tool.gd
+res://scripts/tools/chart_generator_tool.gd.uid -> res://scripts_tools_chart_generator_tool.gd.uid
+res://scripts/tools/generate_example_chart.gd -> res://scripts_tools_generate_example_chart.gd
+res://scripts/tools/generate_example_chart.gd.uid -> res://scripts_tools_generate_example_chart.gd.uid
+res://scripts/tools/judgment_adapter.gd -> res://scripts_tools_judgment_adapter.gd
+res://scripts/tools/judgment_adapter.gd.uid -> res://scripts_tools_judgment_adapter.gd.uid
+res://scripts/tools/simple_chart_generator.gd -> res://scripts_tools_simple_chart_generator.gd
+res://scripts/tools/simple_chart_generator.gd.uid -> res://scripts_tools_simple_chart_generator.gd.uid
+res://scripts/ui/diamond_audio_visualizer.gd -> res://scripts_ui_diamond_audio_visualizer.gd
+res://scripts/ui/diamond_audio_visualizer.gd.uid -> res://scripts_ui_diamond_audio_visualizer.gd.uid
+res://scripts/ui/diamond_menu.gd -> res://scripts_ui_diamond_menu.gd
+res://scripts/ui/diamond_menu.gd.uid -> res://scripts_ui_diamond_menu.gd.uid
+res://scripts/ui/fps_display.gd -> res://scripts_ui_fps_display.gd
+res://scripts/ui/fps_display.gd.uid -> res://scripts_ui_fps_display.gd.uid
+res://scripts/ui/hud_3d.gd -> res://scripts_ui_hud_3d.gd
+res://scripts/ui/hud_3d.gd.uid -> res://scripts_ui_hud_3d.gd.uid
+res://scripts/ui/loading_transition.gd -> res://scripts_ui_loading_transition.gd
+res://scripts/ui/loading_transition.gd.uid -> res://scripts_ui_loading_transition.gd.uid
+res://scripts/ui/menu_background_effects.gd -> res://scripts_ui_menu_background_effects.gd
+res://scripts/ui/menu_background_effects.gd.uid -> res://scripts_ui_menu_background_effects.gd.uid
+res://scripts/ui/results_screen.gd -> res://scripts_ui_results_screen.gd
+res://scripts/ui/results_screen.gd.uid -> res://scripts_ui_results_screen.gd.uid
+res://scripts/ui/settings_menu.gd -> res://scripts_ui_settings_menu.gd
+res://scripts/ui/settings_menu.gd.uid -> res://scripts_ui_settings_menu.gd.uid
+res://scripts/ui/song_database.gd -> res://scripts_ui_song_database.gd
+res://scripts/ui/song_database.gd.uid -> res://scripts_ui_song_database.gd.uid
+res://scripts/ui/song_select.gd -> res://scripts_ui_song_select.gd
+res://scripts/ui/song_select.gd.uid -> res://scripts_ui_song_select.gd.uid
+res://scripts/ui/ui_sound_manager.gd -> res://scripts_ui_ui_sound_manager.gd
+res://scripts/ui/ui_sound_manager.gd.uid -> res://scripts_ui_ui_sound_manager.gd.uid
+res://shaders/center_mask.gdshader -> res://shaders_center_mask.gdshader
+res://shaders/center_mask.gdshader.uid -> res://shaders_center_mask.gdshader.uid

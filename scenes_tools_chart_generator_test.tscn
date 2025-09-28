@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://btskg05qo541a"]
+
+[ext_resource type="Script" uid="uid://e2x08gmoi3ap" path="scripts_tools_generate_example_chart.gd" id="1_test"]
+
+[node name="ChartGeneratorTest" type="Node"]
+script = ExtResource("1_test")

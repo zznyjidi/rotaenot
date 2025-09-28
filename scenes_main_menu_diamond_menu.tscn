@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://cwjxdbt7535ng"]
+
+[ext_resource type="Script" uid="uid://b21n64w6d1qeb" path="res://scripts_ui_diamond_menu.gd" id="1"]
+
+[node name="DiamondMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")

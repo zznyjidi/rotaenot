@@ -1,0 +1,117 @@
+[gd_scene load_steps=5 format=3 uid="uid://dgxea7tpymlxy"]
+
+[ext_resource type="Script" uid="uid://cgxhtyv85akdr" path="scripts_gameplay_gameplay_3d_controller.gd" id="1_3d_controller"]
+[ext_resource type="Script" uid="uid://s4r5qugrfihj" path="scripts_gameplay_playfield_3d.gd" id="2_3d_playfield"]
+[ext_resource type="Script" uid="uid://mgrh2j4m8ejr" path="scripts_gameplay_note_spawner_3d.gd" id="3_3d_spawner"]
+[ext_resource type="Script" uid="uid://dcml6hvoufbd" path="scripts_ui_hud_3d.gd" id="4_3d_hud"]
+
+[node name="Gameplay3D" type="Node2D"]
+script = ExtResource("1_3d_controller")
+
+[node name="BackgroundLayer" type="Node2D" parent="."]
+
+[node name="BackgroundImage" type="TextureRect" parent="BackgroundLayer"]
+offset_right = 1280.0
+offset_bottom = 720.0
+expand_mode = 1
+stretch_mode = 6
+
+[node name="BlurOverlay" type="ColorRect" parent="BackgroundLayer"]
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(0, 0, 0, 0.6)
+
+[node name="Background" type="ColorRect" parent="."]
+visible = false
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(0.02, 0.02, 0.05, 1)
+
+[node name="Playfield3D" type="Node2D" parent="."]
+position = Vector2(640, 360)
+script = ExtResource("2_3d_playfield")
+
+[node name="TrackLines" type="Node2D" parent="Playfield3D"]
+
+[node name="Pads" type="Node2D" parent="Playfield3D"]
+
+[node name="NoteSpawner" type="Node2D" parent="Playfield3D"]
+script = ExtResource("3_3d_spawner")
+
+[node name="NoteContainer" type="Node2D" parent="Playfield3D"]
+
+[node name="HUD" type="Control" parent="."]
+z_index = 50
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_3d_hud")
+
+[node name="TopDisplay" type="HBoxContainer" parent="HUD"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 496.0
+offset_top = 19.0
+offset_right = 796.0
+offset_bottom = 53.0
+grow_horizontal = 2
+theme_override_constants/separation = 50
+alignment = 1
+
+[node name="ScoreLabel" type="Label" parent="HUD/TopDisplay"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "SCORE: 0"
+
+[node name="LifeLabel" type="Label" parent="HUD/TopDisplay"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "LIFE: 100%"
+
+[node name="ComboLabel" type="Label" parent="HUD"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -50.0
+offset_right = 100.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 28
+text = "COMBO: 0"
+horizontal_alignment = 1
+
+[node name="MissLabel" type="Label" parent="HUD"]
+visible = false
+layout_mode = 1
+
+[node name="JudgmentLabel" type="Label" parent="HUD"]
+visible = false
+z_index = 100
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = 50.0
+offset_right = 100.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 32
+text = "PERFECT"
+horizontal_alignment = 1
+vertical_alignment = 1

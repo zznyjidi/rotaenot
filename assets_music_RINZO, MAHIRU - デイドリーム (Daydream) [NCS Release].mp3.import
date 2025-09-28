@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://nmca1maoyfhf"
+path="res://.godot/imported/assets_music_RINZO, MAHIRU - デイドリーム (Daydream) [NCS Release].mp3-698a3c8524e775624cd648d8ca89d880.mp3str"
+
+[deps]
+
+source_file="res://assets_music_RINZO, MAHIRU - デイドリーム (Daydream) [NCS Release].mp3"
+dest_files=["res://.godot/imported/assets_music_RINZO, MAHIRU - デイドリーム (Daydream) [NCS Release].mp3-698a3c8524e775624cd648d8ca89d880.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://0t83k04kbics"
+path="res://.godot/imported/assets_music_Different Heaven - Nekozilla [NCS Release].mp3-d80130539d89e04a6d3e2dd77cb5a756.mp3str"
+
+[deps]
+
+source_file="res://assets_music_Different Heaven - Nekozilla [NCS Release].mp3"
+dest_files=["res://.godot/imported/assets_music_Different Heaven - Nekozilla [NCS Release].mp3-d80130539d89e04a6d3e2dd77cb5a756.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
